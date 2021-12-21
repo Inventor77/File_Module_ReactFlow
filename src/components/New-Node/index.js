@@ -26,7 +26,6 @@ const NewNode = () => {
   const read = () => {
     readFile()
       .then((data) => {
-        console.log(data, "G");
         setNodes(data[0]);
         setNodeId(data[1]);
       })

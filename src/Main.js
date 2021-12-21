@@ -121,7 +121,7 @@ const Main = ({ handleToggleSidebar }) => {
                   to={{
                     pathname: "/edit",
                     state: `${charts[id].values}`,
-                    id: `${id}`,
+                    id: `${chartsId[id]}`,
                     name: `${charts[id].name}`
                   }}
                   style={{ textDecoration: "none", color: "black" }}

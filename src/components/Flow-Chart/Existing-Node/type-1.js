@@ -5,7 +5,8 @@ import ReactFlow, {
   removeElements,
   Controls,
   Background,
-  MiniMap
+  MiniMap,
+  EdgeText
 } from "react-flow-renderer";
 import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
@@ -67,6 +68,10 @@ import useUndoState from "@rooks/use-undo-state";
 import "../Type1/index.css";
 import Sidebar from "../Type1/Sidebar";
 import firestore from "../../../firebase";
+import Utils from "../../../utils/utils";
+
+const utilsObject = new Utils(firestore);
+
 const nodeTypes = {
   selectorNode: CustomNode,
   customNode: CustomNode2,
@@ -124,6 +129,7 @@ const DnDFlow = () => {
   const projectId = location.id;
   const projectName = location.name;
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
   Object.entries(elemen).map((item) => {
     if (item[1].type === "nodeWithCode") {
       item[1].data.settingWidth = function callbackFunction(childData) {
@@ -137,7 +143,16 @@ const DnDFlow = () => {
   const [elements, setElements, undo] = useUndoState(elemen);
   const onConnect = (params) =>
     setElements((els) =>
-      addEdge({ ...params, animated: true, style: { stroke: "#000" } }, els)
+      addEdge(
+        {
+          ...params,
+          animated: true,
+          style: { stroke: "#000", cursor: "pointer" },
+          label: "Edge Label",
+          labelStyle: { fill: "#000", fontWeight: "900", fontSize: "1.5rem" }
+        },
+        els
+      )
     );
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
@@ -154,12 +169,8 @@ const DnDFlow = () => {
     if (projectId === undefined) {
       console.log("error");
     } else {
-      firestore
-        .collection("issueModule")
-        .doc(projectId)
-        .update(data)
-        .then(() => alert("File has been updated successfully"))
-        .catch((err) => console.log(err));
+      utilsObject.updateData("file", projectId, data);
+      console.log(projectId);
     }
   };
 

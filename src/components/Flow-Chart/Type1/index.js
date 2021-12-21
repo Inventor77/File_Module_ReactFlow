@@ -141,7 +141,16 @@ const DnDFlow = () => {
   const [elements, setElements] = useState(initialElements);
   const onConnect = (params) =>
     setElements((els) =>
-      addEdge({ ...params, animated: true, style: { stroke: "#000" } }, els)
+      addEdge(
+        {
+          ...params,
+          animated: true,
+          style: { stroke: "#000" },
+          label: "Edge Label",
+          labelStyle: { fill: "#000", fontWeight: "900", fontSize: "1.5rem" }
+        },
+        els
+      )
     );
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));

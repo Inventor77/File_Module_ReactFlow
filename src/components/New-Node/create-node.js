@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { FaRegFileImage, FaStream, FaRegEdit, FaCode } from "react-icons/fa";
 import Popup from "reactjs-popup";
 import firestore from "../../firebase";
+import Utils from "../../utils/utils";
 
 import Aside from "../../Aside";
 import "./index.css";
@@ -46,6 +47,7 @@ const NewNode = () => {
   const [codeNode, setCodeNode] = useState(code);
   const [codeNode2, setCodeNode2] = useState(code2);
   const [codeNode3, setCodeNode3] = useState(code3);
+  const utilsObject = new Utils(firestore);
 
   const length = Object.keys(nodes).length;
   var number = 7;
@@ -71,12 +73,7 @@ const NewNode = () => {
     if (id === undefined) {
       console.log("error");
     } else {
-      firestore
-        .collection("custom_nodes")
-        .doc(id)
-        .update(data)
-        .then(() => alert("Data updated successfully"))
-        .catch((err) => console.log(err));
+      utilsObject.updateData("node", id, data);
     }
   }, [nodes]);
 

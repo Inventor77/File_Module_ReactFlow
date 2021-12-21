@@ -22,6 +22,21 @@ class Utils {
 
   // --------------- Update ---------------
 
+  updateData(name, id, data) {
+    this.firestore
+      .collection(name === "node" ? "custom_nodes" : "issueModule")
+      .doc(id)
+      .update(data)
+      .then(() =>
+        alert(
+          `File ${
+            name === "node" ? "Data" : "File"
+          } has been updated successfully`
+        )
+      )
+      .catch((err) => console.log(err));
+  }
+
   // --------------------------------------
 
   // ------------ Delete --------------
