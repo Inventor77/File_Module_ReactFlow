@@ -4,31 +4,44 @@ import {
   FaFolderPlus,
   FaLock,
   FaUserCircle,
-  FaBuffer,
+  FaBuffer
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import firebaseDb from "./firebase";
+import firestore from "./firebase";
+import Utils from "./utils/utils";
 
 const Main = ({ handleToggleSidebar }) => {
   const [charts, setCharts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [chartsId, setChartsId] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const utilsObject = new Utils(firestore);
 
   useEffect(() => {
-    firebaseDb.child("charts").on("value", (snapshot) => {
-      if (snapshot.val() != null) {
-        setIsLoading(false);
-        setCharts({
-          ...snapshot.val(),
-        });
-      }
-    });
+    read();
   }, []);
 
-  const deleteFile = (file) => {
-    if (window.confirm("Are you sure to delete this file")) {
-      firebaseDb.child(`charts/${file}`).remove();
-    }
+  const read = () => {
+    readFile()
+      .then((data) => {
+        console.log(data);
+        setIsLoading(false);
+        setCharts(data[0]);
+        setChartsId(data[1]);
+      })
+      .catch((err) => console.log(err.message));
   };
+
+  const readFile = async () => {
+    const docs = await utilsObject.readData("issueModule");
+    let arr = [],
+      id = [];
+    docs.forEach((cur) => {
+      arr = [...arr, cur.data()];
+      id = [...id, cur.id];
+    });
+    return [arr, id];
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -58,7 +71,7 @@ const Main = ({ handleToggleSidebar }) => {
       <header>
         <div
           style={{
-            padding: "20px 24px",
+            padding: "20px 24px"
           }}
         >
           <Link
@@ -75,7 +88,7 @@ const Main = ({ handleToggleSidebar }) => {
             style={{
               textDecoration: "none",
               marginLeft: "20px",
-              borderRadius: "5px",
+              borderRadius: "5px"
             }}
           >
             <FaBuffer />
@@ -97,17 +110,19 @@ const Main = ({ handleToggleSidebar }) => {
         id="myUL"
       >
         {isLoading && <h1 style={{ textAlign: "center" }}>Loading...</h1>}
+
         {Object.keys(charts).map((id) => {
           var d = new Date(charts[id].date);
           return (
             <li className="main-content-list" key={id}>
+              {/* {charts[id].values} */}
               <div className="title">
                 <Link
                   to={{
                     pathname: "/edit",
                     state: `${charts[id].values}`,
                     id: `${id}`,
-                    name: `${charts[id].name}`,
+                    name: `${charts[id].name}`
                   }}
                   style={{ textDecoration: "none", color: "black" }}
                 >
@@ -126,7 +141,11 @@ const Main = ({ handleToggleSidebar }) => {
                   </span>
                 </div>
                 <button
-                  onClick={() => deleteFile(id)}
+                  onClick={() => {
+                    utilsObject
+                      .deleteData("file", chartsId[id])
+                      .then(() => read());
+                  }}
                   className="delete main-delete"
                 >
                   Delete

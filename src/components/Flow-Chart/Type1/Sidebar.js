@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import firebaseDb from "../../../firebase";
+import firestore from "../../../firebase";
+import Utils from "../../../utils/utils";
 
 export default ({ data }) => {
   const [nodes, setNodes] = useState([]);
+  const utilsObject = new Utils(firestore);
 
   useEffect(() => {
-    firebaseDb.child("custom_nodes").on("value", (snapshot) => {
-      if (snapshot.val() != null) {
-        setNodes({
-          ...snapshot.val(),
-        });
-      }
-    });
+    const readFile = async () => {
+      const docs = await utilsObject.readData("custom_nodes");
+      let arr = [];
+      docs.forEach((cur) => {
+        arr = [...arr, cur.data()];
+      });
+      return arr;
+    };
+    readFile()
+      .then((data) => {
+        console.log(data);
+        setNodes(data);
+      })
+      .catch((err) => console.log(err.message));
   }, []);
   const onDragStart = (event, nodeType, nodeDesign) => {
     event.dataTransfer.setData("application/reactflow", nodeType);

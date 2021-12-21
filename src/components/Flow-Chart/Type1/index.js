@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import Utils from "../../../utils/utils";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
   removeElements,
   Controls,
   Background,
-  MiniMap,
+  MiniMap
 } from "react-flow-renderer";
-import firebaseDb from "../../../firebase";
+import firestore from "../../../firebase";
 import { Link } from "react-router-dom";
 import useEventListener from "@use-it/event-listener";
 import Popup from "reactjs-popup";
@@ -64,10 +65,10 @@ import CustomNode46 from "../CustomNodes/CustomNode46";
 import CustomNode47 from "../CustomNodes/CustomNode47";
 import CustomNode48 from "../CustomNodes/CustomNode48";
 import "reactjs-popup/dist/index.css";
-
 import "./index.css";
 import Sidebar from "./Sidebar";
 import useUndo from "./use-history";
+
 const nodeTypes = {
   selectorNode: CustomNode,
   customNode: CustomNode2,
@@ -116,7 +117,7 @@ const nodeTypes = {
   twoImageoneTextoneArea: CustomNode45,
   twoImageoneTextoneCode: CustomNode46,
   twoCodeoneTextoneArea: CustomNode47,
-  twoCodeoneTextoneImage: CustomNode48,
+  twoCodeoneTextoneImage: CustomNode48
 };
 
 const initialElements = [
@@ -129,9 +130,9 @@ const initialElements = [
       wordWrap: "break-word",
       textAlign: "center",
       width: "172px",
-      maxHeight: "1450px",
-    },
-  },
+      maxHeight: "1450px"
+    }
+  }
 ];
 
 const DnDFlow = () => {
@@ -188,7 +189,7 @@ const DnDFlow = () => {
     const imageUrl = "https://source.unsplash.com/random";
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
+      y: event.clientY - reactFlowBounds.top
     });
 
     if (design === "twoCodeoneTextoneImage") {
@@ -207,13 +208,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -235,13 +236,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -261,13 +262,13 @@ const DnDFlow = () => {
             source2: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -284,13 +285,13 @@ const DnDFlow = () => {
             label: "Text Field",
             textarea: "Text Area",
             source: `${imageUrl}`,
-            source2: `${imageUrl}`,
+            source2: `${imageUrl}`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -310,13 +311,13 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -334,13 +335,13 @@ const DnDFlow = () => {
             label: "Text Field",
             label2: "2nd Text Field",
             textarea: "Text Area",
-            source: `${imageUrl}`,
+            source: `${imageUrl}`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -360,13 +361,13 @@ const DnDFlow = () => {
             textarea: "Text Area",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -388,13 +389,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -412,13 +413,13 @@ const DnDFlow = () => {
             label: "Text Field",
             label2: "2nd Text Field",
             textarea: "Text Area",
-            textarea2: "2nd Text Area",
+            textarea2: "2nd Text Area"
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -436,13 +437,13 @@ const DnDFlow = () => {
             label: "Text Field",
             label2: "2nd Text Field",
             source: `${imageUrl}`,
-            source2: `${imageUrl}`,
+            source2: `${imageUrl}`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -464,13 +465,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -488,13 +489,13 @@ const DnDFlow = () => {
             textarea: "Text Area",
             textarea2: "2nd Text Area",
             source: `${imageUrl}`,
-            source2: `${imageUrl}`,
+            source2: `${imageUrl}`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -516,13 +517,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -542,13 +543,13 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -565,13 +566,13 @@ const DnDFlow = () => {
             background: "#cccccc",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -589,13 +590,13 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -613,13 +614,13 @@ const DnDFlow = () => {
             textarea: "Text Area",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -642,13 +643,13 @@ const DnDFlow = () => {
   }`,
             code3: `function fun3(){
     name = "Bye!"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -669,13 +670,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun2(){
     name = "Hello"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -696,13 +697,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun2(){
     name = "Hello"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -723,13 +724,13 @@ const DnDFlow = () => {
   }`,
             code2: `function fun2(){
     name = "Hello"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -748,13 +749,13 @@ const DnDFlow = () => {
             label2: "2nd Text Field",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -773,13 +774,13 @@ const DnDFlow = () => {
             textarea2: "2nd Text Area",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -798,13 +799,13 @@ const DnDFlow = () => {
             source2: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -823,13 +824,13 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -848,13 +849,13 @@ const DnDFlow = () => {
             textarea: "Text Area",
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -873,13 +874,13 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             code: `function fun(){
     name = "Daya"
-  }`,
+  }`
           },
           style: {
             wordWrap: "break-word",
             width: "300px",
-            maxHeight: "1950px",
-          },
+            maxHeight: "1950px"
+          }
         })
       );
       return;
@@ -901,8 +902,8 @@ const DnDFlow = () => {
             background: "#cccccc",
             code: `function daya(){
     name = "Daya"
-  }`,
-          },
+  }`
+          }
         })
       );
       return;
@@ -920,8 +921,8 @@ const DnDFlow = () => {
             textAlign: "center",
             borderRadius: "50%",
             width: "100px",
-            height: "100px",
-          },
+            height: "100px"
+          }
         })
       );
       return;
@@ -933,7 +934,7 @@ const DnDFlow = () => {
           id: (es.length + 1).toString(),
           type,
           position,
-          data: { label: `node`, background: "#cccccc" },
+          data: { label: `node`, background: "#cccccc" }
         })
       );
       return;
@@ -949,14 +950,14 @@ const DnDFlow = () => {
             radius: 5,
             source: `${imageUrl}`,
             textarea: "Text Area",
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "300px",
-            maxHeight: "1350px",
-          },
+            maxHeight: "1350px"
+          }
         })
       );
       return;
@@ -972,14 +973,14 @@ const DnDFlow = () => {
             radius: 5,
             label: `node`,
             source: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "300px",
-            maxHeight: "1650px",
-          },
+            maxHeight: "1650px"
+          }
         })
       );
       return;
@@ -996,14 +997,14 @@ const DnDFlow = () => {
             label: `node`,
             source: `${imageUrl}`,
             textarea: `Text Area Text`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "300px",
-            maxHeight: "450px",
-          },
+            maxHeight: "450px"
+          }
         })
       );
       return;
@@ -1018,14 +1019,14 @@ const DnDFlow = () => {
           data: {
             radius: 5,
             source: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             textAlign: "center",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-          },
+            justifyContent: "center"
+          }
         })
       );
       return;
@@ -1041,14 +1042,14 @@ const DnDFlow = () => {
             radius: 5,
             label: `Text Field`,
             textarea: "Text Area ",
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "240px",
-            maxHeight: "1320px",
-          },
+            maxHeight: "1320px"
+          }
         })
       );
       return;
@@ -1064,14 +1065,14 @@ const DnDFlow = () => {
             radius: 5,
             label: `Text Field`,
             label2: `2nd Text Field`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "290px",
-            maxHeight: "1280px",
-          },
+            maxHeight: "1280px"
+          }
         })
       );
       return;
@@ -1087,14 +1088,14 @@ const DnDFlow = () => {
             label: `Text Field`,
             label2: `2nd Text Field`,
             label3: `3rd Text Field`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "280px",
-            maxHeight: "1440px",
-          },
+            maxHeight: "1440px"
+          }
         })
       );
       return;
@@ -1110,14 +1111,14 @@ const DnDFlow = () => {
             radius: 5,
             textarea: `Text area`,
             textarea2: `2nd Text area`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "240px",
-            maxHeight: "1400px",
-          },
+            maxHeight: "1400px"
+          }
         })
       );
       return;
@@ -1134,14 +1135,14 @@ const DnDFlow = () => {
             textarea: `Text area`,
             textarea2: `2nd Text area`,
             textarea3: `3rd Text area`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "290px",
-            maxHeight: "1620px",
-          },
+            maxHeight: "1620px"
+          }
         })
       );
       return;
@@ -1157,14 +1158,14 @@ const DnDFlow = () => {
             radius: 5,
             source: `${imageUrl}`,
             source2: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "220px",
-            height: "2100px",
-          },
+            height: "2100px"
+          }
         })
       );
       return;
@@ -1181,14 +1182,14 @@ const DnDFlow = () => {
             source: `${imageUrl}`,
             source2: `${imageUrl}`,
             source3: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "220px",
-            height: "180px",
-          },
+            height: "180px"
+          }
         })
       );
       return;
@@ -1205,14 +1206,14 @@ const DnDFlow = () => {
             label: `1st Text Field`,
             label2: `2nd Text Field`,
             textarea: `Text Area`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "300px",
-            maxHeight: "1640px",
-          },
+            maxHeight: "1640px"
+          }
         })
       );
       return;
@@ -1229,14 +1230,14 @@ const DnDFlow = () => {
             label: `1st Text Field`,
             label2: `2nd Text Field`,
             source: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "280px",
-            maxHeight: "1670px",
-          },
+            maxHeight: "1670px"
+          }
         })
       );
       return;
@@ -1253,14 +1254,14 @@ const DnDFlow = () => {
             textarea: `1st Text Area`,
             textarea2: `2nd Text Area`,
             label: `Text Field`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "280px",
-            maxHeight: "1740px",
-          },
+            maxHeight: "1740px"
+          }
         })
       );
       return;
@@ -1277,14 +1278,14 @@ const DnDFlow = () => {
             textarea: `1st Text Area`,
             textarea2: `2nd Text Area`,
             source: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "240px",
-            maxHeight: "1770px",
-          },
+            maxHeight: "1770px"
+          }
         })
       );
       return;
@@ -1301,14 +1302,14 @@ const DnDFlow = () => {
             label: `Text Field`,
             source: `${imageUrl}`,
             source2: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "240px",
-            maxHeight: "1760px",
-          },
+            maxHeight: "1760px"
+          }
         })
       );
       return;
@@ -1325,14 +1326,14 @@ const DnDFlow = () => {
             textarea: `Text Area`,
             source: `${imageUrl}`,
             source2: `${imageUrl}`,
-            background: "#cccccc",
+            background: "#cccccc"
           },
           style: {
             wordWrap: "break-word",
             textAlign: "center",
             width: "240px",
-            maxHeight: "1760px",
-          },
+            maxHeight: "1760px"
+          }
         })
       );
       return;
@@ -1349,8 +1350,8 @@ const DnDFlow = () => {
           textAlign: "center",
           borderColor: "#ff0072",
           width: "172px",
-          maxHeight: "1400px",
-        },
+          maxHeight: "1400px"
+        }
       })
     );
   };
@@ -2122,7 +2123,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            radius: radius,
+            radius: radius
           };
         }
         return el;
@@ -2136,7 +2137,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            label: nodeName,
+            label: nodeName
           };
         }
         return el;
@@ -2150,7 +2151,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            label2: nodeName2,
+            label2: nodeName2
           };
         }
         return el;
@@ -2164,7 +2165,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            label3: nodeName3,
+            label3: nodeName3
           };
         }
         return el;
@@ -2282,7 +2283,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.position = {
             ...el.position,
-            x: nodeX,
+            x: nodeX
           };
         }
 
@@ -2297,7 +2298,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.position = {
             ...el.position,
-            y: nodeY,
+            y: nodeY
           };
         }
 
@@ -2312,7 +2313,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            source: nodeImage,
+            source: nodeImage
           };
         }
 
@@ -2327,7 +2328,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            source2: nodeImage2,
+            source2: nodeImage2
           };
         }
 
@@ -2342,7 +2343,7 @@ const DnDFlow = () => {
         if (el.id === element.id) {
           el.data = {
             ...el.data,
-            source3: nodeImage3,
+            source3: nodeImage3
           };
         }
 
@@ -2393,9 +2394,12 @@ const DnDFlow = () => {
     var data = {
       name: fileName,
       values: JSON.stringify(elements),
-      date: new Date().getTime(),
+      date: new Date().getTime()
     };
-    firebaseDb.child("charts").push(data);
+
+    // firestore code
+    const utilsObject = new Utils(firestore);
+    utilsObject.addData("issueModule", data).then(() => console.log("Success"));
   };
 
   const download = (content, fileName, contentType) => {
@@ -2704,7 +2708,7 @@ const DnDFlow = () => {
                       style={{
                         width: "90%",
                         border: "1px solid black",
-                        marginTop: "10px",
+                        marginTop: "10px"
                       }}
                     />
                     {fileName === "" && error ? (
@@ -2712,7 +2716,7 @@ const DnDFlow = () => {
                         style={{
                           color: "red",
                           marginTop: "5px",
-                          marginLeft: "10px",
+                          marginLeft: "10px"
                         }}
                       >
                         Please provide name of the file
@@ -2756,7 +2760,7 @@ const DnDFlow = () => {
                       style={{
                         marginLeft: "10px",
                         marginTop: "10px",
-                        fontSize: "16px",
+                        fontSize: "16px"
                       }}
                     >
                       Before clicking on download button to download the pdf
@@ -2770,9 +2774,9 @@ const DnDFlow = () => {
                       onClick={() => {
                         htmlToImage
                           .toPng(document.getElementById("reactflow-wrapper"), {
-                            quality: 1,
+                            quality: 1
                           })
-                          .then(function(dataUrl) {
+                          .then(function (dataUrl) {
                             var link = document.createElement("a");
                             link.download = "chart.jpeg";
                             const pdf = new jsPDF();

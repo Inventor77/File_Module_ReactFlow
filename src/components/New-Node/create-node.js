@@ -3,7 +3,7 @@ import { FaBars } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { FaRegFileImage, FaStream, FaRegEdit, FaCode } from "react-icons/fa";
 import Popup from "reactjs-popup";
-import firebaseDb from "../../firebase";
+import firestore from "../../firebase";
 
 import Aside from "../../Aside";
 import "./index.css";
@@ -62,7 +62,7 @@ const NewNode = () => {
     setNodes((el) => ({
       ...el,
       name: `${nodeName}`,
-      Description: `${nodeDesc}`,
+      Description: `${nodeDesc}`
     }));
   };
 
@@ -71,19 +71,18 @@ const NewNode = () => {
     if (id === undefined) {
       console.log("error");
     } else {
-      firebaseDb.child(`custom_nodes/${id}`).set(data, (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          // console.log("Data updated successfully");
-        }
-      });
+      firestore
+        .collection("custom_nodes")
+        .doc(id)
+        .update(data)
+        .then(() => alert("Data updated successfully"))
+        .catch((err) => console.log(err));
     }
   }, [nodes]);
 
   const settingNodes = () => {
     setNodes((el) => ({
-      ...el,
+      ...el
     }));
   };
 
@@ -128,7 +127,7 @@ const NewNode = () => {
                         style={{
                           width: "90%",
                           border: "1px solid black",
-                          marginTop: "5px",
+                          marginTop: "5px"
                         }}
                       />
                       <div style={{ marginTop: "20px" }}>
@@ -143,7 +142,7 @@ const NewNode = () => {
                           style={{
                             width: "90%",
                             border: "1px solid black",
-                            marginTop: "5px",
+                            marginTop: "5px"
                           }}
                         />
                       </div>
@@ -415,7 +414,7 @@ const NewNode = () => {
             <a
               className="add-project-2"
               style={{
-                cursor: "pointer",
+                cursor: "pointer"
               }}
             >
               Add Fields
@@ -442,7 +441,7 @@ const NewNode = () => {
                       if (nodeTextField === false) {
                         setNodes((el) => ({
                           ...el,
-                          textField: "true",
+                          textField: "true"
                         }));
                       }
                     } else {
@@ -458,7 +457,7 @@ const NewNode = () => {
                         setNodeTextField2(true);
                         setNodes((el) => ({
                           ...el,
-                          textField2: "true",
+                          textField2: "true"
                         }));
                       }
                     } else {
@@ -474,7 +473,7 @@ const NewNode = () => {
                         setNodeTextField3(true);
                         setNodes((el) => ({
                           ...el,
-                          textField3: "true",
+                          textField3: "true"
                         }));
                       }
                     } else {
@@ -501,7 +500,7 @@ const NewNode = () => {
                       if (nodeTextArea === false) {
                         setNodes((el) => ({
                           ...el,
-                          textArea: "true",
+                          textArea: "true"
                         }));
                       }
                     } else {
@@ -517,7 +516,7 @@ const NewNode = () => {
                         setNodeTextArea2(true);
                         setNodes((el) => ({
                           ...el,
-                          textArea2: "true",
+                          textArea2: "true"
                         }));
                       }
                     } else {
@@ -533,7 +532,7 @@ const NewNode = () => {
                         setNodeTextArea3(true);
                         setNodes((el) => ({
                           ...el,
-                          textArea3: "true",
+                          textArea3: "true"
                         }));
                       }
                     } else {
@@ -560,7 +559,7 @@ const NewNode = () => {
                       if (nodeImage === false) {
                         setNodes((el) => ({
                           ...el,
-                          Image: "true",
+                          Image: "true"
                         }));
                       }
                     } else {
@@ -576,7 +575,7 @@ const NewNode = () => {
                         setNodeImage2(true);
                         setNodes((el) => ({
                           ...el,
-                          Image2: "true",
+                          Image2: "true"
                         }));
                       }
                     } else {
@@ -592,7 +591,7 @@ const NewNode = () => {
                         setNodeImage3(true);
                         setNodes((el) => ({
                           ...el,
-                          Image3: "true",
+                          Image3: "true"
                         }));
                       }
                     } else {
@@ -619,7 +618,7 @@ const NewNode = () => {
                       if (codeNode === false) {
                         setNodes((el) => ({
                           ...el,
-                          code: "true",
+                          code: "true"
                         }));
                       }
                     } else {
@@ -635,7 +634,7 @@ const NewNode = () => {
                         setCodeNode2(true);
                         setNodes((el) => ({
                           ...el,
-                          code2: "true",
+                          code2: "true"
                         }));
                       }
                     } else {
@@ -651,7 +650,7 @@ const NewNode = () => {
                         setCodeNode3(true);
                         setNodes((el) => ({
                           ...el,
-                          code3: "true",
+                          code3: "true"
                         }));
                       }
                     } else {

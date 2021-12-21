@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import Popup from "reactjs-popup";
-import firebaseDb from "../../firebase";
+import firestore from "../../firebase";
 
 import Aside from "../../Aside";
+import Utils from "../../utils/utils";
 
+const utilsObject = new Utils(firestore);
 const NewNode = () => {
   const [toggled, setToggled] = useState(false);
   const handleToggleSidebar = (value) => {
@@ -15,21 +17,36 @@ const NewNode = () => {
   const [nodeName, setNodeName] = useState("");
   const [nodeDesc, setNodeDesc] = useState("");
   const [nodes, setNodes] = useState([]);
+  const [nodeId, setNodeId] = useState([]);
 
   useEffect(() => {
-    firebaseDb.child("custom_nodes").on("value", (snapshot) => {
-      if (snapshot.val() != null) {
-        setNodes({
-          ...snapshot.val(),
-        });
-      }
-    });
+    read();
   }, []);
 
-  const deleteNode = (node) => {
-    if (window.confirm("Are you sure to delete this node")) {
-      firebaseDb.child(`custom_nodes/${node}`).remove();
-    }
+  const read = () => {
+    readFile()
+      .then((data) => {
+        console.log(data, "G");
+        setNodes(data[0]);
+        setNodeId(data[1]);
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const readFile = async () => {
+    const docs = await utilsObject.readData("custom_nodes");
+    let arr = [],
+      id = [];
+    docs.forEach((cur) => {
+      console.log(cur.data());
+      arr = [...arr, cur.data()];
+      id = [...id, cur.id];
+    });
+    return [arr, id];
+  };
+
+  const addNode = (data) => {
+    utilsObject.addData("custom_nodes", data).then(() => read());
   };
 
   return (
@@ -73,7 +90,7 @@ const NewNode = () => {
                       style={{
                         width: "90%",
                         border: "1px solid black",
-                        marginTop: "5px",
+                        marginTop: "5px"
                       }}
                     />
                     <div style={{ marginTop: "20px" }}>
@@ -88,7 +105,7 @@ const NewNode = () => {
                         style={{
                           width: "90%",
                           border: "1px solid black",
-                          marginTop: "5px",
+                          marginTop: "5px"
                         }}
                       />
                     </div>
@@ -111,9 +128,9 @@ const NewNode = () => {
                             (sessionStorage.length + 1)
                           ).toString(),
                           name: `${nodeName}`,
-                          Description: `${nodeDesc}`,
+                          Description: `${nodeDesc}`
                         };
-                        firebaseDb.child("custom_nodes").push(data);
+                        addNode(data);
                         close();
                       }}
                     >
@@ -185,11 +202,11 @@ const NewNode = () => {
                                 state: `${node}`,
                                 id: `${id}`,
                                 name: `${nodes[id].name}`,
-                                description: `${nodes[id].Description}`,
+                                description: `${nodes[id].Description}`
                               }}
                               style={{
                                 textDecoration: "none",
-                                color: "black",
+                                color: "black"
                               }}
                             >
                               {nodes[id].name}
@@ -199,7 +216,11 @@ const NewNode = () => {
                           <td>{noOfFields}</td>
                           <td>
                             <button
-                              onClick={() => deleteNode(id)}
+                              onClick={() => {
+                                utilsObject
+                                  .deleteData("node", nodeId[id])
+                                  .then(() => read());
+                              }}
                               className="delete"
                             >
                               Delete
