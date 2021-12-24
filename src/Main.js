@@ -23,7 +23,6 @@ const Main = ({ handleToggleSidebar }) => {
   const read = () => {
     readFile()
       .then((data) => {
-        console.log(data);
         setIsLoading(false);
         setCharts(data[0]);
         setChartsId(data[1]);

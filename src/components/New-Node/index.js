@@ -37,7 +37,6 @@ const NewNode = () => {
     let arr = [],
       id = [];
     docs.forEach((cur) => {
-      console.log(cur.data());
       arr = [...arr, cur.data()];
       id = [...id, cur.id];
     });

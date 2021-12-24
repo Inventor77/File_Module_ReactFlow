@@ -19,7 +19,6 @@ export default ({ data }) => {
     };
     readFile()
       .then((data) => {
-        console.log(data);
         setNodes(data);
       })
       .catch((err) => console.log(err.message));

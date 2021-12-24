@@ -5,8 +5,7 @@ import ReactFlow, {
   removeElements,
   Controls,
   Background,
-  MiniMap,
-  EdgeText
+  MiniMap
 } from "react-flow-renderer";
 import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
@@ -141,19 +140,20 @@ const DnDFlow = () => {
     }
   });
   const [elements, setElements, undo] = useUndoState(elemen);
-  const onConnect = (params) =>
+  const onConnect = (params) => {
     setElements((els) =>
       addEdge(
         {
           ...params,
           animated: true,
           style: { stroke: "#000", cursor: "pointer" },
-          label: "Edge Label",
+          label: edgeLabel,
           labelStyle: { fill: "#000", fontWeight: "900", fontSize: "1.5rem" }
         },
         els
       )
     );
+  };
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
 
@@ -1380,6 +1380,8 @@ const DnDFlow = () => {
       })
     );
   };
+
+  // Node Properties
   const [nodeName, setNodeName] = useState("");
   const [nodeName2, setNodeName2] = useState("");
   const [nodeName3, setNodeName3] = useState("");
@@ -1413,6 +1415,16 @@ const DnDFlow = () => {
   const [height, setHeight] = useState(200);
   const [radius, setRadius] = useState("");
 
+  // Edge Properties
+
+  const [edgeLabel, setEdgeLabel] = useState("Edge Label");
+  const [edgeLabelStyle, setEdgeLabelStyle] = useState({ fontSize: "1rem" });
+  const [edgeType, setEdgeType] = useState("default");
+  const [edgeAnimated, setEdgeAnimated] = useState(true);
+  const [edgeStyle, setEdgeStyle] = useState({ stroke: "#000" });
+  const [edgeArrowHead, setEdgeArrowHead] = useState("arrow");
+  const [showEdgeProperties, setShowEdgeProperties] = useState(false);
+
   const callbackFunction = (childData) => {
     setWidth(childData);
   };
@@ -1420,25 +1432,54 @@ const DnDFlow = () => {
   const callbackFunction2 = (childData) => {
     setHeight(childData);
   };
+  const isEdge = (val) => {
+    if (
+      val === "default" ||
+      val === "straignt" ||
+      val === "step" ||
+      val === "smoothstep"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const onElementClick = (event, element) => {
-    setElement(element);
-    setNodeX(element.position.x);
-    setNodeY(element.position.y);
-    setNodeName(element.data.label);
-    setNodeName2(element.data.label2);
-    setNodeName3(element.data.label3);
-    setNodeImage(element.data.source);
-    setNodeImage2(element.data.source2);
-    setNodeImage3(element.data.source3);
-    setTextArea(element.data.textarea);
-    setTextArea2(element.data.textarea2);
-    setTextArea3(element.data.textarea3);
-    setCode(element.data.code);
-    setCode2(element.data.code2);
-    setCode3(element.data.code3);
-    setNodeBg(element.data.background);
-    setRadius(element.data.radius);
+    if (isEdge(element.type)) {
+      setElement(element);
+      setEdgeLabel(element.label);
+      setEdgeLabelStyle(element.labelStyle);
+      setEdgeType(element.type);
+      setEdgeAnimated(element.animated);
+      setEdgeStyle(element.edgeStyle);
+      setEdgeArrowHead(element.arrowHeadType);
+    } else {
+      setElement(element);
+      console.log(element.type);
+      setNodeX(element.position.x);
+      setNodeY(element.position.y);
+      setNodeName(element.data.label);
+      setNodeName2(element.data.label2);
+      setNodeName3(element.data.label3);
+      setNodeImage(element.data.source);
+      setNodeImage2(element.data.source2);
+      setNodeImage3(element.data.source3);
+      setTextArea(element.data.textarea);
+      setTextArea2(element.data.textarea2);
+      setTextArea3(element.data.textarea3);
+      setCode(element.data.code);
+      setCode2(element.data.code2);
+      setCode3(element.data.code3);
+      setNodeBg(element.data.background);
+      setRadius(element.data.radius);
+    }
+    // Edge
+    if (isEdge(element.type)) {
+      setShowEdgeProperties(true);
+    }
+
+    // Node
 
     if (
       element.type === "nodeWithOnlyText" ||
@@ -1457,6 +1498,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "selectorNode") {
       setHideText1(true);
@@ -1471,6 +1513,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "customNode") {
       setHideText1(true);
@@ -1485,6 +1528,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWithImageText") {
@@ -1500,6 +1544,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWithImageOnly") {
@@ -1515,6 +1560,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWithTextAndArea") {
@@ -1530,6 +1576,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "mainCustomNode") {
@@ -1545,6 +1592,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "nodeWith3Text") {
       setHideText1(true);
@@ -1559,6 +1607,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2TextArea") {
@@ -1574,6 +1623,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "nodeWith3TextArea") {
       setHideTextArea1(true);
@@ -1588,6 +1638,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith3Image") {
@@ -1603,6 +1654,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Field1Area") {
@@ -1618,6 +1670,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Field1Image") {
@@ -1633,6 +1686,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Area1Field") {
@@ -1648,6 +1702,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Area1Image") {
@@ -1663,6 +1718,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Image") {
@@ -1678,6 +1734,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Image1Field") {
@@ -1693,6 +1750,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWith2Image1Area") {
@@ -1708,6 +1766,7 @@ const DnDFlow = () => {
       setHideCode(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "nodeWithCode") {
@@ -1723,6 +1782,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "codethree") {
       setHideCode(true);
@@ -1737,6 +1797,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(true);
+      setShowEdgeProperties(false);
     }
     if (element.type === "oneTextTwoCode") {
       setHideCode(true);
@@ -1751,6 +1812,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "oneAreaTwoCode") {
       setHideCode(true);
@@ -1765,6 +1827,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "oneImageTwoCode") {
       setHideCode(true);
@@ -1779,6 +1842,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoTextOneCode") {
       setHideCode(true);
@@ -1793,6 +1857,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoTextOneCode") {
       setHideCode(true);
@@ -1807,6 +1872,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoAreaOneCode") {
       setHideCode(true);
@@ -1821,6 +1887,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoImageOneCode") {
@@ -1836,6 +1903,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "oneConeAoneI") {
       setHideCode(true);
@@ -1850,6 +1918,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "oneConeAoneT") {
@@ -1865,6 +1934,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "oneConeToneI") {
       setHideCode(true);
@@ -1879,6 +1949,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "onlyCode") {
@@ -1894,6 +1965,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "oneCodeoneArea") {
@@ -1909,6 +1981,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "oneCodeoneImage") {
@@ -1924,6 +1997,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "fourElements") {
@@ -1939,6 +2013,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoTexttwoArea") {
@@ -1954,6 +2029,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoTexttwoImage") {
@@ -1969,6 +2045,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoTexttwoCode") {
@@ -1984,6 +2061,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoAreatwoCode") {
@@ -1999,6 +2077,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoAreatwoImage") {
@@ -2014,6 +2093,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoImagetwoCode") {
@@ -2029,6 +2109,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoTextOneAreaOneImage") {
@@ -2044,6 +2125,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoTextOneAreaOneCode") {
@@ -2059,6 +2141,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoTextOneImageOneCode") {
       setHideCode(true);
@@ -2073,6 +2156,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoImageoneTextoneArea") {
       setHideCode(false);
@@ -2087,6 +2171,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoImageoneTextoneCode") {
@@ -2102,6 +2187,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(false);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
 
     if (element.type === "twoCodeoneTextoneArea") {
@@ -2117,6 +2203,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
     if (element.type === "twoCodeoneTextoneImage") {
       setHideCode(true);
@@ -2131,6 +2218,7 @@ const DnDFlow = () => {
       setHideText3(false);
       setHideCode2(true);
       setHideCode3(false);
+      setShowEdgeProperties(false);
     }
   };
 
@@ -2139,7 +2227,41 @@ const DnDFlow = () => {
     setNodeX(element.position.x);
     setNodeY(element.position.y);
   };
+  // Edge
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el = { ...el, label: edgeLabel };
+        }
+        return el;
+      })
+    );
+  }, [edgeLabel, setElements]);
 
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el = { ...el, animated: edgeAnimated };
+        }
+        return el;
+      })
+    );
+  }, [edgeAnimated, setElements]);
+
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el = { ...el, arrowHeadType: edgeArrowHead };
+        }
+        return el;
+      })
+    );
+  }, [setEdgeArrowHead, setElements]);
+
+  // Node
   useEffect(() => {
     setElements((els) =>
       els.map((el) => {
@@ -2411,6 +2533,7 @@ const DnDFlow = () => {
       <ReactFlowProvider>
         <Sidebar />
         <div className="reactflow-wrapper" id="reactflow-wrapper">
+          {/* {JSON.stringify(elements)} */}
           <ReactFlow
             elements={elements}
             onConnect={onConnect}
@@ -2444,201 +2567,268 @@ const DnDFlow = () => {
             </Link>
           </div>
           <div className="description">
-            Select the Node and Change its Properties
+            Select the Node/Edge and Change its Properties
           </div>
-          <div className="name-node">
-            <label>Border Radius:</label> <br />
-            <input
-              type="number"
-              value={radius || ""}
-              onChange={(evt) => setRadius(evt.target.value)}
-            />
-          </div>
-          {hideText1 ? (
-            <div className="name-node">
-              <label>label:</label> <br />
-              <input
-                value={nodeName || ""}
-                onChange={(evt) => setNodeName(evt.target.value)}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-          {hideText2 ? (
-            <div className="name-node">
-              <label>label2:</label> <br />
-              <input
-                value={nodeName2 || ""}
-                onChange={(evt) => setNodeName2(evt.target.value)}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-          {hideText3 ? (
-            <div className="name-node">
-              <label>label3:</label> <br />
-              <input
-                value={nodeName3 || ""}
-                onChange={(evt) => setNodeName3(evt.target.value)}
-              />
-            </div>
-          ) : (
-            ""
-          )}
-          <div className="position">
-            <label>Position X: {Math.trunc(nodeX)}</label> <br />
-            <label>Position Y: {Math.trunc(nodeY)}</label>{" "}
-          </div>
-          {/* <div className="dimensions">
+          {showEdgeProperties ? (
             <div>
-              <label>Width:</label> <br />
-              <input
-                style={{ width: "50px" }}
-                value={parseInt(width)}
-                type="number"
-                onChange={(evt) => setWidth(evt.target.value)}
-              />
+              <div className="name-edge">
+                <label>Edge label:</label> <br />
+                <input
+                  value={edgeLabel}
+                  onChange={(evt) => {
+                    setEdgeLabel(evt.target.value);
+                  }}
+                />
+              </div>
+              <div className="checkboxwrapper">
+                <label>Animated Edge</label>
+                <input
+                  type="checkbox"
+                  checked={edgeAnimated}
+                  onChange={(evt) => setEdgeAnimated(evt.target.checked)}
+                />
+              </div>
+              {/* <div className="name-node">
+                <label>Edge Label Size</label> <br />
+                <input
+                  type="number"
+                  value={edgeLabelStyle.fontSize}
+                  onChange={(evt) =>
+                    setEdgeLabelStyle({
+                      ...edgeLabelStyle,
+                      fontSize: evt.target.value
+                    })
+                  }
+                />
+              </div> */}
+              {/* <div className="checkboxwrapper">
+                <label>Arrow Edge</label>
+                <input
+                  type="checkbox"
+                  checked={edgeArrowHead}
+                  onChange={(evt) =>
+                    setEdgeArrowHead(
+                      evt.target.checked ? "arrow" : "arrowclosed"
+                    )
+                  }
+                />
+              </div> */}
+              {/* setEdgeLabelStyle(element.labelStyle); 
+              setEdgeType(element.type);
+              setEdgeStyle(element.edgeStyle); */}
             </div>
+          ) : (
             <div>
-              <label>Height:</label> <br />
-              <input
-                style={{ width: "50px" }}
-                value={parseInt(height)}
-                type="number"
-                onChange={(evt) => setHeight(evt.target.value)}
-              />
-            </div>
-          </div> */}
-          <br />
-          <label className="updatenode__bglabel">background:</label>
+              <div className="name-node">
+                <label>Border Radius:</label> <br />
+                <input
+                  type="number"
+                  value={radius || ""}
+                  onChange={(evt) => setRadius(evt.target.value)}
+                />
+              </div>
+              {hideText1 ? (
+                <div className="name-node">
+                  <label>label:</label> <br />
+                  <input
+                    value={nodeName || ""}
+                    onChange={(evt) => {
+                      setNodeName(evt.target.value);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              {hideText2 ? (
+                <div className="name-node">
+                  <label>label2:</label> <br />
+                  <input
+                    value={nodeName2 || ""}
+                    onChange={(evt) => setNodeName2(evt.target.value)}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              {hideText3 ? (
+                <div className="name-node">
+                  <label>label3:</label> <br />
+                  <input
+                    value={nodeName3 || ""}
+                    onChange={(evt) => setNodeName3(evt.target.value)}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="position">
+                <label>Position X: {Math.trunc(nodeX)}</label> <br />
+                <label>Position Y: {Math.trunc(nodeY)}</label>{" "}
+              </div>
+              {/* <div className="dimensions">
+        <div>
+          <label>Width:</label> <br />
           <input
-            style={{ width: "150px" }}
-            type="color"
-            value={nodeBg}
-            onChange={(evt) => setNodeBg(evt.target.value)}
-          />{" "}
-          <br />
-          {hideCode ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Code:</label> <br />
-              <textarea
-                value={code}
-                cols="30"
-                rows="10"
-                onChange={(evt) => setCode(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
-          )}
-          {hideCode2 ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Code2:</label> <br />
-              <textarea
-                value={code2}
-                cols="30"
-                rows="10"
-                onChange={(evt) => setCode2(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
-          )}
-          {hideCode3 ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Code3:</label> <br />
-              <textarea
-                value={code3}
-                cols="30"
-                rows="10"
-                onChange={(evt) => setCode3(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
-          )}
-          {hideImage ? (
-            <div className="image-node">
-              <label>Image:</label> <br />
+            style={{ width: "50px" }}
+            value={parseInt(width)}
+            type="number"
+            onChange={(evt) => setWidth(evt.target.value)}
+          />
+        </div>
+        <div>
+          <label>Height:</label> <br />
+          <input
+            style={{ width: "50px" }}
+            value={parseInt(height)}
+            type="number"
+            onChange={(evt) => setHeight(evt.target.value)}
+          />
+        </div>
+      </div> */}
+              <br />
+              <label className="updatenode__bglabel">background:</label>
               <input
                 style={{ width: "150px" }}
-                type="file"
-                onChange={onImageChange}
+                type="color"
+                value={nodeBg}
+                onChange={(evt) => setNodeBg(evt.target.value)}
               />{" "}
               <br />
-              <img src={nodeImage} width="150" height="70" alt="img" /> <br />
+              {hideCode ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Code:</label> <br />
+                  <textarea
+                    value={code}
+                    cols="30"
+                    rows="10"
+                    onChange={(evt) => setCode(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
+              {hideCode2 ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Code2:</label> <br />
+                  <textarea
+                    value={code2}
+                    cols="30"
+                    rows="10"
+                    onChange={(evt) => setCode2(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
+              {hideCode3 ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Code3:</label> <br />
+                  <textarea
+                    value={code3}
+                    cols="30"
+                    rows="10"
+                    onChange={(evt) => setCode3(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
+              {hideImage ? (
+                <div className="image-node">
+                  <label>Image:</label> <br />
+                  <input
+                    style={{ width: "150px" }}
+                    type="file"
+                    onChange={onImageChange}
+                  />{" "}
+                  <br />
+                  <img src={nodeImage} width="150" height="70" alt="img" />{" "}
+                  <br />
+                </div>
+              ) : (
+                ""
+              )}
+              {hideImage2 ? (
+                <div className="image-node">
+                  <label>Image2:</label> <br />
+                  <input
+                    style={{ width: "150px" }}
+                    type="file"
+                    onChange={onImageChange2}
+                  />{" "}
+                  <br />
+                  <img
+                    src={nodeImage2}
+                    width="150"
+                    height="70"
+                    alt="img"
+                  />{" "}
+                  <br />
+                </div>
+              ) : (
+                ""
+              )}
+              {hideImage3 ? (
+                <div className="image-node">
+                  <label>Image3:</label> <br />
+                  <input
+                    style={{ width: "150px" }}
+                    type="file"
+                    onChange={onImageChange3}
+                  />{" "}
+                  <br />
+                  <img
+                    src={nodeImage3}
+                    width="150"
+                    height="70"
+                    alt="img"
+                  />{" "}
+                  <br />
+                </div>
+              ) : (
+                ""
+              )}
+              {hideTextArea1 ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Text Area:</label> <br />
+                  <textarea
+                    value={textArea}
+                    cols="30"
+                    rows="5"
+                    onChange={(evt) => setTextArea(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
+              {hideTextArea2 ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Text Area2:</label> <br />
+                  <textarea
+                    value={textArea2}
+                    cols="30"
+                    rows="5"
+                    onChange={(evt) => setTextArea2(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
+              {hideTextArea3 ? (
+                <div className="name-node" style={{ marginTop: "12px" }}>
+                  <label>Text Area3:</label> <br />
+                  <textarea
+                    value={textArea3}
+                    cols="30"
+                    rows="5"
+                    onChange={(evt) => setTextArea3(evt.target.value)}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-          ) : (
-            ""
-          )}
-          {hideImage2 ? (
-            <div className="image-node">
-              <label>Image2:</label> <br />
-              <input
-                style={{ width: "150px" }}
-                type="file"
-                onChange={onImageChange2}
-              />{" "}
-              <br />
-              <img src={nodeImage2} width="150" height="70" alt="img" /> <br />
-            </div>
-          ) : (
-            ""
-          )}
-          {hideImage3 ? (
-            <div className="image-node">
-              <label>Image3:</label> <br />
-              <input
-                style={{ width: "150px" }}
-                type="file"
-                onChange={onImageChange3}
-              />{" "}
-              <br />
-              <img src={nodeImage3} width="150" height="70" alt="img" /> <br />
-            </div>
-          ) : (
-            ""
-          )}
-          {hideTextArea1 ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Text Area:</label> <br />
-              <textarea
-                value={textArea}
-                cols="30"
-                rows="5"
-                onChange={(evt) => setTextArea(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
-          )}
-          {hideTextArea2 ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Text Area2:</label> <br />
-              <textarea
-                value={textArea2}
-                cols="30"
-                rows="5"
-                onChange={(evt) => setTextArea2(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
-          )}
-          {hideTextArea3 ? (
-            <div className="name-node" style={{ marginTop: "12px" }}>
-              <label>Text Area3:</label> <br />
-              <textarea
-                value={textArea3}
-                cols="30"
-                rows="5"
-                onChange={(evt) => setTextArea3(evt.target.value)}
-              ></textarea>
-            </div>
-          ) : (
-            ""
           )}
           <div className="checkboxwrapper">
             <label>Hide MiniMap:</label>
