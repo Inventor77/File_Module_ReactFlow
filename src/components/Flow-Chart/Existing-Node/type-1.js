@@ -68,7 +68,6 @@ import "../Type1/index.css";
 import Sidebar from "../Type1/Sidebar";
 import firestore from "../../../firebase";
 import Utils from "../../../utils/utils";
-
 const utilsObject = new Utils(firestore);
 
 const nodeTypes = {
@@ -145,10 +144,17 @@ const DnDFlow = () => {
       addEdge(
         {
           ...params,
+          type: "default",
           animated: true,
           style: { stroke: "#000", cursor: "pointer" },
-          label: edgeLabel,
-          labelStyle: { fill: "#000", fontWeight: "900", fontSize: "1.5rem" }
+          label: "Edge Label",
+          labelStyle: {
+            fill: "#000",
+            fontWeight: "800",
+            fontSize: "1rem",
+            cursor: "pointer"
+          },
+          arrowHeadType: "arrow"
         },
         els
       )
@@ -1417,11 +1423,11 @@ const DnDFlow = () => {
 
   // Edge Properties
 
-  const [edgeLabel, setEdgeLabel] = useState("Edge Label");
-  const [edgeLabelStyle, setEdgeLabelStyle] = useState({ fontSize: "1rem" });
+  const [edgeLabel, setEdgeLabel] = useState("");
+  const [edgeLabelStyle, setEdgeLabelStyle] = useState({});
   const [edgeType, setEdgeType] = useState("default");
   const [edgeAnimated, setEdgeAnimated] = useState(true);
-  const [edgeStyle, setEdgeStyle] = useState({ stroke: "#000" });
+  // const [edgeStyle, setEdgeStyle] = useState({});
   const [edgeArrowHead, setEdgeArrowHead] = useState("arrow");
   const [showEdgeProperties, setShowEdgeProperties] = useState(false);
 
@@ -1432,10 +1438,11 @@ const DnDFlow = () => {
   const callbackFunction2 = (childData) => {
     setHeight(childData);
   };
+
   const isEdge = (val) => {
     if (
       val === "default" ||
-      val === "straignt" ||
+      val === "straight" ||
       val === "step" ||
       val === "smoothstep"
     ) {
@@ -1445,781 +1452,784 @@ const DnDFlow = () => {
     }
   };
 
-  const onElementClick = (event, element) => {
-    if (isEdge(element.type)) {
-      setElement(element);
-      setEdgeLabel(element.label);
-      setEdgeLabelStyle(element.labelStyle);
-      setEdgeType(element.type);
-      setEdgeAnimated(element.animated);
-      setEdgeStyle(element.edgeStyle);
-      setEdgeArrowHead(element.arrowHeadType);
-    } else {
-      setElement(element);
-      console.log(element.type);
-      setNodeX(element.position.x);
-      setNodeY(element.position.y);
-      setNodeName(element.data.label);
-      setNodeName2(element.data.label2);
-      setNodeName3(element.data.label3);
-      setNodeImage(element.data.source);
-      setNodeImage2(element.data.source2);
-      setNodeImage3(element.data.source3);
-      setTextArea(element.data.textarea);
-      setTextArea2(element.data.textarea2);
-      setTextArea3(element.data.textarea3);
-      setCode(element.data.code);
-      setCode2(element.data.code2);
-      setCode3(element.data.code3);
-      setNodeBg(element.data.background);
-      setRadius(element.data.radius);
-    }
-    // Edge
-    if (isEdge(element.type)) {
-      setShowEdgeProperties(true);
-    }
+  const onElementClick = (event, elem) => {
+    elements.map((element) => {
+      if (elem.id === element.id) {
+        setElement(element);
+        if (isEdge(element.type)) {
+          setEdgeType(element.type);
+          setEdgeLabel(element.label);
+          setEdgeLabelStyle(element.labelStyle);
+          setEdgeAnimated(element.animated);
+          // setEdgeStyle(element.style);
+          setEdgeArrowHead(element.arrowHeadType);
+        } else {
+          setNodeX(element.position.x);
+          setNodeY(element.position.y);
+          setNodeName(element.data.label);
+          setNodeName2(element.data.label2);
+          setNodeName3(element.data.label3);
+          setNodeImage(element.data.source);
+          setNodeImage2(element.data.source2);
+          setNodeImage3(element.data.source3);
+          setTextArea(element.data.textarea);
+          setTextArea2(element.data.textarea2);
+          setTextArea3(element.data.textarea3);
+          setCode(element.data.code);
+          setCode2(element.data.code2);
+          setCode3(element.data.code3);
+          setNodeBg(element.data.background);
+          setRadius(element.data.radius);
+        }
 
-    // Node
+        // Edge
+        if (isEdge(element.type)) {
+          setShowEdgeProperties(true);
+        }
 
-    if (
-      element.type === "nodeWithOnlyText" ||
-      element.type === "circleNode" ||
-      element.type === "squareNode"
-    ) {
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "selectorNode") {
-      setHideText1(true);
-      setHideImage(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "customNode") {
-      setHideText1(true);
-      setHideImage(true);
-      setHideTextArea1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        // Node
 
-    if (element.type === "nodeWithImageText") {
-      setHideText1(false);
-      setHideImage(true);
-      setHideTextArea1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (
+          element.type === "nodeWithOnlyText" ||
+          element.type === "circleNode" ||
+          element.type === "squareNode"
+        ) {
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "selectorNode") {
+          setHideText1(true);
+          setHideImage(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "customNode") {
+          setHideText1(true);
+          setHideImage(true);
+          setHideTextArea1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWithImageOnly") {
-      setHideText1(false);
-      setHideImage(true);
-      setHideTextArea1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWithImageText") {
+          setHideText1(false);
+          setHideImage(true);
+          setHideTextArea1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWithTextAndArea") {
-      setHideText1(true);
-      setHideImage(false);
-      setHideTextArea1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWithImageOnly") {
+          setHideText1(false);
+          setHideImage(true);
+          setHideTextArea1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "mainCustomNode") {
-      setHideText1(true);
-      setHideText2(true);
-      setHideImage(false);
-      setHideTextArea1(false);
-      setHideText3(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "nodeWith3Text") {
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(true);
-      setHideImage(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWithTextAndArea") {
+          setHideText1(true);
+          setHideImage(false);
+          setHideTextArea1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2TextArea") {
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideImage(false);
-      setHideTextArea3(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "nodeWith3TextArea") {
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(true);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "mainCustomNode") {
+          setHideText1(true);
+          setHideText2(true);
+          setHideImage(false);
+          setHideTextArea1(false);
+          setHideText3(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "nodeWith3Text") {
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(true);
+          setHideImage(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith3Image") {
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(true);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2TextArea") {
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideImage(false);
+          setHideTextArea3(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "nodeWith3TextArea") {
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(true);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Field1Area") {
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith3Image") {
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(true);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Field1Image") {
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Field1Area") {
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Area1Field") {
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Field1Image") {
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Area1Image") {
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Area1Field") {
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Image") {
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Area1Image") {
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Image1Field") {
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Image") {
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWith2Image1Area") {
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Image1Field") {
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "nodeWithCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "codethree") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(true);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "oneTextTwoCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "oneAreaTwoCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "oneImageTwoCode") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoTextOneCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoTextOneCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoAreaOneCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWith2Image1Area") {
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoImageOneCode") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "oneConeAoneI") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "nodeWithCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "codethree") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(true);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "oneTextTwoCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "oneAreaTwoCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "oneImageTwoCode") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoTextOneCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoTextOneCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoAreaOneCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "oneConeAoneT") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "oneConeToneI") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoImageOneCode") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "oneConeAoneI") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "onlyCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "oneConeAoneT") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "oneConeToneI") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "oneCodeoneArea") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "onlyCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "oneCodeoneImage") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "oneCodeoneArea") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "fourElements") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "oneCodeoneImage") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoTexttwoArea") {
-      setHideCode(false);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "fourElements") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoTexttwoImage") {
-      setHideCode(false);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoTexttwoArea") {
+          setHideCode(false);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoTexttwoCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoTexttwoImage") {
+          setHideCode(false);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoAreatwoCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoTexttwoCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoAreatwoImage") {
-      setHideCode(false);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(true);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoAreatwoCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoImagetwoCode") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(false);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoAreatwoImage") {
+          setHideCode(false);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(true);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoTextOneAreaOneImage") {
-      setHideCode(false);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoImagetwoCode") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(false);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoTextOneAreaOneCode") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoTextOneImageOneCode") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(true);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoImageoneTextoneArea") {
-      setHideCode(false);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoTextOneAreaOneImage") {
+          setHideCode(false);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoImageoneTextoneCode") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(true);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(false);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoTextOneAreaOneCode") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoTextOneImageOneCode") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(true);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoImageoneTextoneArea") {
+          setHideCode(false);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
 
-    if (element.type === "twoCodeoneTextoneArea") {
-      setHideCode(true);
-      setHideImage(false);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(true);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
-    if (element.type === "twoCodeoneTextoneImage") {
-      setHideCode(true);
-      setHideImage(true);
-      setHideImage2(false);
-      setHideImage3(false);
-      setHideTextArea1(false);
-      setHideTextArea2(false);
-      setHideTextArea3(false);
-      setHideText1(true);
-      setHideText2(false);
-      setHideText3(false);
-      setHideCode2(true);
-      setHideCode3(false);
-      setShowEdgeProperties(false);
-    }
+        if (element.type === "twoImageoneTextoneCode") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(true);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(false);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+
+        if (element.type === "twoCodeoneTextoneArea") {
+          setHideCode(true);
+          setHideImage(false);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(true);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+        if (element.type === "twoCodeoneTextoneImage") {
+          setHideCode(true);
+          setHideImage(true);
+          setHideImage2(false);
+          setHideImage3(false);
+          setHideTextArea1(false);
+          setHideTextArea2(false);
+          setHideTextArea3(false);
+          setHideText1(true);
+          setHideText2(false);
+          setHideText3(false);
+          setHideCode2(true);
+          setHideCode3(false);
+          setShowEdgeProperties(false);
+        }
+      }
+    });
   };
 
   const onDragEnd = (event, element) => {
@@ -2227,7 +2237,20 @@ const DnDFlow = () => {
     setNodeX(element.position.x);
     setNodeY(element.position.y);
   };
+
   // Edge
+
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el = { ...el, type: edgeType };
+        }
+        return el;
+      })
+    );
+  }, [edgeType, setElements]);
+
   useEffect(() => {
     setElements((els) =>
       els.map((el) => {
@@ -2260,6 +2283,62 @@ const DnDFlow = () => {
       })
     );
   }, [setEdgeArrowHead, setElements]);
+
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el.labelStyle = {
+            ...el.labelStyle,
+            fontSize: edgeLabelStyle.fontSize
+          };
+        }
+        return el;
+      })
+    );
+  }, [edgeLabelStyle, setElements]);
+
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el.labelStyle = {
+            ...el.labelStyle,
+            fill: edgeLabelStyle.fill
+          };
+        }
+        return el;
+      })
+    );
+  }, [edgeLabelStyle, setElements]);
+
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el.labelStyle = {
+            ...el.labelStyle,
+            fontWeight: edgeLabelStyle.fontWeight
+          };
+        }
+        return el;
+      })
+    );
+  }, [edgeLabelStyle, setElements]);
+
+  // useEffect(() => {
+  //   setElements((els) =>
+  //     els.map((el) => {
+  //       if (el.id === element.id) {
+  //         el.style = {
+  //           ...el.style,
+  //           stroke: edgeStyle.stroke
+  //         };
+  //       }
+  //       return el;
+  //     })
+  //   );
+  // }, [edgeStyle, setElements]);
 
   // Node
   useEffect(() => {
@@ -2566,11 +2645,32 @@ const DnDFlow = () => {
               Back To Dashboard
             </Link>
           </div>
+          <br></br>
           <div className="description">
-            Select the Node/Edge and Change its Properties
+            <h1>Select the Node/Edge and Change its Properties</h1>
           </div>
+          <br></br>
+          <hr></hr>
+          <br></br>
           {showEdgeProperties ? (
             <div>
+              <div>
+                <label>Edge Type</label>
+                <br></br>
+                <select
+                  style={{ width: "65%", padding: ".1rem", height: "2rem" }}
+                  name="edgeType"
+                  id="edgeType"
+                  value={edgeType}
+                  onChange={(evt) => setEdgeType(evt.target.value)}
+                >
+                  <option value="default">Default</option>
+                  <option value="straight">Straight</option>
+                  <option value="step">Step</option>
+                  <option value="smoothstep">Smooth Step</option>
+                </select>
+              </div>
+              <br></br>
               <div className="name-edge">
                 <label>Edge label:</label> <br />
                 <input
@@ -2580,6 +2680,7 @@ const DnDFlow = () => {
                   }}
                 />
               </div>
+              <br></br>
               <div className="checkboxwrapper">
                 <label>Animated Edge</label>
                 <input
@@ -2588,8 +2689,9 @@ const DnDFlow = () => {
                   onChange={(evt) => setEdgeAnimated(evt.target.checked)}
                 />
               </div>
-              {/* <div className="name-node">
-                <label>Edge Label Size</label> <br />
+              <br></br>
+              <div className="name-node">
+                <label>Label Size</label> <br></br>
                 <input
                   type="number"
                   value={edgeLabelStyle.fontSize}
@@ -2600,12 +2702,50 @@ const DnDFlow = () => {
                     })
                   }
                 />
-              </div> */}
+              </div>
+              <br></br>
+              <div>
+                <label>Label Colour</label>
+                <input
+                  style={{ width: "150px" }}
+                  type="color"
+                  value={edgeLabelStyle.fill}
+                  onChange={(evt) =>
+                    setEdgeLabelStyle({
+                      ...edgeLabelStyle,
+                      fill: evt.target.value
+                    })
+                  }
+                />
+              </div>
+              <br></br>
+              <div>
+                <label> Label fontWeight</label>
+                <br></br>
+                <select
+                  style={{ width: "65%", padding: ".1rem", height: "2rem" }}
+                  name="edgeLabelFontWeight"
+                  id="edgeLabel-fontWeight"
+                  value={edgeLabelStyle.fontWeight}
+                  onChange={(evt) =>
+                    setEdgeLabelStyle({
+                      ...edgeLabelStyle,
+                      fontWeight: evt.target.value
+                    })
+                  }
+                >
+                  <option value="normal">light</option>
+                  <option value="bolder" selected>
+                    bold
+                  </option>
+                </select>
+              </div>
+              <br></br>
               {/* <div className="checkboxwrapper">
                 <label>Arrow Edge</label>
                 <input
                   type="checkbox"
-                  checked={edgeArrowHead}
+                  checked={edgeArrowHead === "arrow" ? true : false}
                   onChange={(evt) =>
                     setEdgeArrowHead(
                       evt.target.checked ? "arrow" : "arrowclosed"
@@ -2613,9 +2753,18 @@ const DnDFlow = () => {
                   }
                 />
               </div> */}
-              {/* setEdgeLabelStyle(element.labelStyle); 
-              setEdgeType(element.type);
-              setEdgeStyle(element.edgeStyle); */}
+              <br></br>
+              {/* <div>
+                <label>Edge Colour</label>
+                <input
+                  style={{ width: "150px" }}
+                  type="color"
+                  value={edgeStyle.stroke}
+                  onChange={(evt) =>
+                    setEdgeStyle({ ...edgeStyle, stroke: evt.target.value })
+                  }
+                />
+              </div> */}
             </div>
           ) : (
             <div>
