@@ -176,7 +176,6 @@ const DnDFlow = () => {
       console.log("error");
     } else {
       utilsObject.updateData("file", projectId, data);
-      console.log(projectId);
     }
   };
 

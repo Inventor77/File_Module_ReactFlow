@@ -20,6 +20,7 @@ const NewNode = () => {
   const projectName = location.name;
   const description = location.description;
   const id = location.id;
+  const [docId, setDocId] = useState();
   const [nodes, setNodes] = useState(elemen);
   const text = elemen.textField === "true" ? true : false;
   const area = elemen.textArea === "true" ? true : false;
@@ -49,6 +50,27 @@ const NewNode = () => {
   const [codeNode3, setCodeNode3] = useState(code3);
   const utilsObject = new Utils(firestore);
 
+  useEffect(() => {
+    docIdList();
+  }, [nodes]);
+
+  const docIdList = () => {
+    readFile()
+      .then((data) => {
+        setDocId(data);
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const readFile = async () => {
+    const docs = await utilsObject.readData("custom_nodes");
+    let id = [];
+    docs.forEach((current) => {
+      id = [...id, current.id];
+    });
+    return id;
+  };
+
   const length = Object.keys(nodes).length;
   var number = 7;
 
@@ -68,12 +90,16 @@ const NewNode = () => {
     }));
   };
 
+  const updateNode = async (id, data) => {
+    await utilsObject.updateData("node", id, data);
+  };
   useEffect(() => {
     var data = nodes;
-    if (id === undefined) {
+    if (docId === undefined) {
       console.log("error");
     } else {
-      utilsObject.updateData("node", id, data);
+      updateNode(docId[id], data);
+      // console.log();
     }
   }, [nodes]);
 
