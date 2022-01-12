@@ -1,4 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import {
+  FaAngleDoubleLeft,
+  FaSave,
+  FaRegFilePdf,
+  FaRegFileAlt
+} from "react-icons/fa";
 import Utils from "../../../utils/utils";
 import ReactFlow, {
   ReactFlowProvider,
@@ -1415,7 +1421,7 @@ const DnDFlow = () => {
   const [edgeLabelStyle, setEdgeLabelStyle] = useState({});
   const [edgeType, setEdgeType] = useState("default");
   const [edgeAnimated, setEdgeAnimated] = useState(true);
-  // const [edgeStyle, setEdgeStyle] = useState({});
+  const [edgeStyle, setEdgeStyle] = useState({});
   const [edgeArrowHead, setEdgeArrowHead] = useState("arrow");
   const [showEdgeProperties, setShowEdgeProperties] = useState(false);
 
@@ -1449,7 +1455,7 @@ const DnDFlow = () => {
           setEdgeLabel(element.label);
           setEdgeLabelStyle(element.labelStyle);
           setEdgeAnimated(element.animated);
-          // setEdgeStyle(element.style);
+          setEdgeStyle(element.style);
           setEdgeArrowHead(element.arrowHeadType);
         } else {
           setNodeX(element.position.x);
@@ -2313,19 +2319,19 @@ const DnDFlow = () => {
     );
   }, [edgeLabelStyle, setElements]);
 
-  // useEffect(() => {
-  //   setElements((els) =>
-  //     els.map((el) => {
-  //       if (el.id === element.id) {
-  //         el.style = {
-  //           ...el.style,
-  //           stroke: edgeStyle.stroke
-  //         };
-  //       }
-  //       return el;
-  //     })
-  //   );
-  // }, [edgeStyle, setElements]);
+  useEffect(() => {
+    setElements((els) =>
+      els.map((el) => {
+        if (el.id === element.id) {
+          el.style = {
+            ...el.style,
+            stroke: edgeStyle.stroke
+          };
+        }
+        return el;
+      })
+    );
+  }, [edgeStyle, setElements]);
 
   // Node
   useEffect(() => {
@@ -2641,455 +2647,23 @@ const DnDFlow = () => {
   useEventListener("keydown", handler);
 
   return (
-    <div className="dndflow" ref={reactFlowWrapper}>
-      <ReactFlowProvider>
-        <Sidebar />
-        <div className="reactflow-wrapper" id="reactflow-wrapper">
-          <ReactFlow
-            elements={elements}
-            onConnect={onConnect}
-            onElementClick={onElementClick}
-            onElementsRemove={onElementsRemove}
-            nodeTypes={nodeTypes}
-            onLoad={onLoad}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onNodeDragStop={onDragEnd}
-          >
-            <Background color="#000" gap={12} />
-            {nodeHidden ? (
-              ""
-            ) : (
-              <MiniMap
-                nodeColor={(n) => {
-                  if (n.type === "input") return "blue";
-
-                  return "#FFCC00";
-                }}
-              />
-            )}
-            <Controls />
-          </ReactFlow>
+    <main className="main-container">
+      <header className="top-nav">
+        <div className="back-button">
+          <Link className="tab active-tab" to="/">
+            <FaAngleDoubleLeft />
+            <span className="tab-text"> Return </span>
+          </Link>
         </div>
-        <aside style={{ textAlign: "center" }}>
-          <div className="back-button">
-            <Link className="back" to="/">
-              Back To Dashboard
-            </Link>
-          </div>
-          <div className="undo-redo">
-            {/* <button onClick={undo}>undo</button>{" "} */}
-            {/* <button key="redo" onClick={redoCount} disabled={!canRedo}>
-              redo
-            </button> */}
-          </div>
-          <div className="description">
-            Select the Node/Edge and Change its Properties
-          </div>
-          {showEdgeProperties ? (
-            <div>
-              <div>
-                <label>Edge Type</label>
-                <br></br>
-                <select
-                  style={{ width: "65%", padding: ".1rem", height: "2rem" }}
-                  name="edgeType"
-                  id="edgeType"
-                  value={edgeType}
-                  onChange={(evt) => setEdgeType(evt.target.value)}
-                >
-                  <option value="default">Default</option>
-                  <option value="straight">Straight</option>
-                  <option value="step">Step</option>
-                  <option value="smoothstep">Smooth Step</option>
-                </select>
-              </div>
-              <br></br>
-              <div className="name-edge">
-                <label>Edge label:</label> <br />
-                <input
-                  value={edgeLabel}
-                  onChange={(evt) => {
-                    setEdgeLabel(evt.target.value);
-                  }}
-                />
-              </div>
-              <br></br>
-              <div className="checkboxwrapper">
-                <label>Animated Edge</label>
-                <input
-                  type="checkbox"
-                  checked={edgeAnimated}
-                  onChange={(evt) => setEdgeAnimated(evt.target.checked)}
-                />
-              </div>
-              <br></br>
-              <div className="name-node">
-                <label>Label Size</label> <br></br>
-                <input
-                  type="number"
-                  value={edgeLabelStyle.fontSize}
-                  onChange={(evt) =>
-                    setEdgeLabelStyle({
-                      ...edgeLabelStyle,
-                      fontSize: evt.target.value
-                    })
-                  }
-                />
-              </div>
-              <br></br>
-              <div>
-                <label>Label Colour</label>
-                <input
-                  style={{ width: "150px" }}
-                  type="color"
-                  value={edgeLabelStyle.fill}
-                  onChange={(evt) =>
-                    setEdgeLabelStyle({
-                      ...edgeLabelStyle,
-                      fill: evt.target.value
-                    })
-                  }
-                />
-              </div>
-              <br></br>
-              <div>
-                <label> Label fontWeight</label>
-                <br></br>
-                <select
-                  style={{ width: "65%", padding: ".1rem", height: "2rem" }}
-                  name="edgeLabelFontWeight"
-                  id="edgeLabel-fontWeight"
-                  value={edgeLabelStyle.fontWeight}
-                  onChange={(evt) =>
-                    setEdgeLabelStyle({
-                      ...edgeLabelStyle,
-                      fontWeight: evt.target.value
-                    })
-                  }
-                >
-                  <option value="normal">light</option>
-                  <option value="bolder" selected>
-                    bold
-                  </option>
-                </select>
-              </div>
-              <br></br>
-              {/* <div className="checkboxwrapper">
-                <label>Arrow Edge</label>
-                <input
-                  type="checkbox"
-                  checked={edgeArrowHead === "arrow" ? true : false}
-                  onChange={(evt) =>
-                    setEdgeArrowHead(
-                      evt.target.checked ? "arrow" : "arrowclosed"
-                    )
-                  }
-                />
-              </div> */}
-              <br />
-              {/* <div>
-                <label>Edge Colour</label>
-                <input
-                  style={{ width: "150px" }}
-                  type="color"
-                  value={edgeStyle.stroke}
-                  onChange={(evt) =>
-                    setEdgeStyle({ ...edgeStyle, stroke: evt.target.value })
-                  }
-                />
-              </div> */}
-            </div>
-          ) : (
-            <div>
-              <div className="name-node">
-                <label>Border Radius:</label> <br />
-                <input
-                  type="number"
-                  value={radius || ""}
-                  onChange={(evt) => setRadius(evt.target.value)}
-                />
-              </div>
-              {hideText1 ? (
-                <div className="name-node">
-                  <label>label:</label> <br />
-                  <input
-                    value={nodeName || ""}
-                    onChange={(evt) => {
-                      setNodeName(evt.target.value);
-                    }}
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-              {hideText2 ? (
-                <div className="name-node">
-                  <label>label2:</label> <br />
-                  <input
-                    value={nodeName2 || ""}
-                    onChange={(evt) => setNodeName2(evt.target.value)}
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-              {hideText3 ? (
-                <div className="name-node">
-                  <label>label3:</label> <br />
-                  <input
-                    value={nodeName3 || ""}
-                    onChange={(evt) => setNodeName3(evt.target.value)}
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-              <div className="position">
-                <label>Position X: {Math.trunc(nodeX)}</label> <br />
-                <label>Position Y: {Math.trunc(nodeY)}</label>{" "}
-              </div>
-              {/* <div className="dimensions">
-        <div>
-          <label>Width:</label> <br />
-          <input
-            style={{ width: "50px" }}
-            value={parseInt(width)}
-            type="number"
-            onChange={(evt) => setWidth(evt.target.value)}
-          />
-        </div>
-        <div>
-          <label>Height:</label> <br />
-          <input
-            style={{ width: "50px" }}
-            value={parseInt(height)}
-            type="number"
-            onChange={(evt) => setHeight(evt.target.value)}
-          />
-        </div>
-      </div> */}
-              <br />
-              <label className="updatenode__bglabel">background:</label>
-              <input
-                style={{ width: "150px" }}
-                type="color"
-                value={nodeBg}
-                onChange={(evt) => setNodeBg(evt.target.value)}
-              />{" "}
-              <br />
-              {hideCode ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Code:</label> <br />
-                  <textarea
-                    value={code}
-                    cols="30"
-                    rows="10"
-                    onChange={(evt) => setCode(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-              {hideCode2 ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Code2:</label> <br />
-                  <textarea
-                    value={code2}
-                    cols="30"
-                    rows="10"
-                    onChange={(evt) => setCode2(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-              {hideCode3 ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Code3:</label> <br />
-                  <textarea
-                    value={code3}
-                    cols="30"
-                    rows="10"
-                    onChange={(evt) => setCode3(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-              {hideImage ? (
-                <div className="image-node">
-                  <label>Image:</label> <br />
-                  <input
-                    style={{ width: "150px" }}
-                    type="file"
-                    onChange={onImageChange}
-                  />{" "}
-                  <br />
-                  <img src={nodeImage} width="150" height="70" alt="img" />{" "}
-                  <br />
-                </div>
-              ) : (
-                ""
-              )}
-              {hideImage2 ? (
-                <div className="image-node">
-                  <label>Image2:</label> <br />
-                  <input
-                    style={{ width: "150px" }}
-                    type="file"
-                    onChange={onImageChange2}
-                  />{" "}
-                  <br />
-                  <img
-                    src={nodeImage2}
-                    width="150"
-                    height="70"
-                    alt="img"
-                  />{" "}
-                  <br />
-                </div>
-              ) : (
-                ""
-              )}
-              {hideImage3 ? (
-                <div className="image-node">
-                  <label>Image3:</label> <br />
-                  <input
-                    style={{ width: "150px" }}
-                    type="file"
-                    onChange={onImageChange3}
-                  />{" "}
-                  <br />
-                  <img
-                    src={nodeImage3}
-                    width="150"
-                    height="70"
-                    alt="img"
-                  />{" "}
-                  <br />
-                </div>
-              ) : (
-                ""
-              )}
-              {hideTextArea1 ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Text Area:</label> <br />
-                  <textarea
-                    value={textArea}
-                    cols="30"
-                    rows="5"
-                    onChange={(evt) => setTextArea(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-              {hideTextArea2 ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Text Area2:</label> <br />
-                  <textarea
-                    value={textArea2}
-                    cols="30"
-                    rows="5"
-                    onChange={(evt) => setTextArea2(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-              {hideTextArea3 ? (
-                <div className="name-node" style={{ marginTop: "12px" }}>
-                  <label>Text Area3:</label> <br />
-                  <textarea
-                    value={textArea3}
-                    cols="30"
-                    rows="5"
-                    onChange={(evt) => setTextArea3(evt.target.value)}
-                  ></textarea>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          )}
-          <div className="checkboxwrapper">
-            <label>Hide MiniMap:</label>
-            <input
-              type="checkbox"
-              checked={nodeHidden}
-              onChange={(evt) => setNodeHidden(evt.target.checked)}
-            />
-          </div>
-          {success ? (
-            <div>
-              <h1 style={{ color: "green", marginTop: "5px" }}>
-                Successfully saved the file {fileName}
-              </h1>
-              <p>You can close the Window Now</p>
-            </div>
-          ) : (
+        <div className="header-right">
+          <div className="btn-container">
             <Popup
-              trigger={<button className="save"> Save This File </button>}
-              modal
-              nested
-            >
-              {(close) => (
-                <div className="modal">
-                  <button className="close" onClick={close}>
-                    &times;
-                  </button>
-                  <div className="header"> Save File </div>
-                  <div className="content">
-                    <label style={{ marginLeft: "10px", marginTop: "10px" }}>
-                      Name of the File:
-                    </label>{" "}
-                    <br />
-                    <input
-                      value={fileName || ""}
-                      placeholder="Name of the File"
-                      onChange={(evt) => setFileName(evt.target.value)}
-                      style={{
-                        width: "90%",
-                        border: "1px solid black",
-                        marginTop: "10px"
-                      }}
-                    />
-                    {fileName === "" && error ? (
-                      <h3
-                        style={{
-                          color: "red",
-                          marginTop: "5px",
-                          marginLeft: "10px"
-                        }}
-                      >
-                        Please provide name of the file
-                      </h3>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="actions">
-                    <button className="button" onClick={saveFile}>
-                      Save
-                    </button>
-                  </div>
-                </div>
-              )}
-            </Popup>
-          )}
-          <div className="checkboxwrapper">
-            <button
-              className="save"
-              style={{ background: "green", fontSize: "16px" }}
-              onClick={exportJson}
-            >
-              Export JSON
-            </button>
-          </div>
-          <div className="checkboxwrapper">
-            <Popup
-              trigger={<button className="save"> Export PDF </button>}
+              trigger={
+                <button className="export-pdf">
+                  <FaRegFilePdf />
+                  <span className="tab-text"> Export to PDF </span>
+                </button>
+              }
               modal
               nested
             >
@@ -3114,7 +2688,7 @@ const DnDFlow = () => {
                   </div>
                   <div className="actions">
                     <button
-                      className="button"
+                      className="button popup-success-btn"
                       onClick={() => {
                         htmlToImage
                           .toPng(document.getElementById("reactflow-wrapper"), {
@@ -3148,9 +2722,461 @@ const DnDFlow = () => {
               )}
             </Popup>
           </div>
-        </aside>
-      </ReactFlowProvider>
-    </div>
+          <div className="btn-container">
+            <button className="export-json" onClick={exportJson}>
+              <FaRegFileAlt />
+              <span className="tab-text"> Export to JSON </span>
+            </button>
+          </div>
+          <div className="btn-container">
+            {success ? (
+              <div>
+                <h1 style={{ color: "green", marginTop: "5px" }}>
+                  Successfully saved the file {fileName}
+                </h1>
+                <p>You can close the Window Now</p>
+              </div>
+            ) : (
+              <Popup
+                trigger={
+                  <button className="tab">
+                    <FaSave />
+                    <span className="tab-text"> Save </span>
+                  </button>
+                }
+                modal
+                nested
+              >
+                {(close) => (
+                  <div className="modal">
+                    <button className="close" onClick={close}>
+                      &times;
+                    </button>
+                    <div className="header"> Save File </div>
+                    <div className="content">
+                      <label style={{ marginLeft: "10px", marginTop: "10px" }}>
+                        Name of the File:
+                      </label>{" "}
+                      <br />
+                      <input
+                        value={fileName || ""}
+                        placeholder="Name of the File"
+                        onChange={(evt) => setFileName(evt.target.value)}
+                        style={{
+                          width: "90%",
+                          border: "1px solid black",
+                          marginTop: "10px"
+                        }}
+                      />
+                      {fileName === "" && error ? (
+                        <h3
+                          style={{
+                            color: "red",
+                            marginTop: "5px",
+                            marginLeft: "10px"
+                          }}
+                        >
+                          Please provide name of the file
+                        </h3>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="actions">
+                      <button className="button" onClick={saveFile}>
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </Popup>
+            )}
+          </div>
+        </div>
+      </header>
+      <div className="dndflow" ref={reactFlowWrapper}>
+        <ReactFlowProvider>
+          <Sidebar />
+          <div className="reactflow-wrapper" id="reactflow-wrapper">
+            <ReactFlow
+              elements={elements}
+              onConnect={onConnect}
+              onElementClick={onElementClick}
+              onElementsRemove={onElementsRemove}
+              nodeTypes={nodeTypes}
+              onLoad={onLoad}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onNodeDragStop={onDragEnd}
+            >
+              <Background color="#000" gap={12} />
+              {nodeHidden ? (
+                ""
+              ) : (
+                <MiniMap
+                  nodeColor={(n) => {
+                    if (n.type === "input") return "blue";
+
+                    return "#FFCC00";
+                  }}
+                />
+              )}
+              <Controls />
+            </ReactFlow>
+          </div>
+          <aside>
+            {showEdgeProperties ? (
+              <div>
+                <div className="description">
+                  <h1>Edit Edge</h1>
+                </div>
+                <div className="checkboxwrapper">
+                  <span>Hide MiniMap:</span>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={nodeHidden}
+                      onChange={(evt) => setNodeHidden(evt.target.checked)}
+                    />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+                <br></br>
+                <br></br>
+                <div className="edge-input">
+                  <label>Edge label:</label>
+                  <input
+                    value={edgeLabel}
+                    onChange={(evt) => {
+                      setEdgeLabel(evt.target.value);
+                    }}
+                  />
+                </div>
+                <br></br>
+                <div className="edge-input">
+                  <label>Edge Type</label>
+                  <select
+                    name="edgeType"
+                    id="edgeType"
+                    value={edgeType}
+                    onChange={(evt) => setEdgeType(evt.target.value)}
+                  >
+                    <option value="default">Default</option>
+                    <option value="straight">Straight</option>
+                    <option value="step">Step</option>
+                    <option value="smoothstep">Smooth Step</option>
+                  </select>
+                </div>
+                <br></br>
+                <div className="edge-input">
+                  <label>Edge Colour</label>
+                  <input
+                    style={{ width: "150px" }}
+                    type="color"
+                    value={edgeStyle.stroke}
+                    onChange={(evt) =>
+                      setEdgeStyle({ ...edgeStyle, stroke: evt.target.value })
+                    }
+                  />
+                </div>
+                <br></br>
+                <div className="checkboxwrapper">
+                  <span>Animated Edge</span>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={edgeAnimated}
+                      onChange={(evt) => setEdgeAnimated(evt.target.checked)}
+                    />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+                <br></br>
+                <div className="edge-input">
+                  <label>Label Size</label>
+                  <input
+                    type="number"
+                    value={edgeLabelStyle.fontSize}
+                    onChange={(evt) =>
+                      setEdgeLabelStyle({
+                        ...edgeLabelStyle,
+                        fontSize: evt.target.value
+                      })
+                    }
+                  />
+                </div>
+                <br></br>
+                <div className="edge-input">
+                  <label>Label Colour</label>
+                  <input
+                    style={{ width: "150px" }}
+                    type="color"
+                    value={edgeLabelStyle.fill}
+                    onChange={(evt) =>
+                      setEdgeLabelStyle({
+                        ...edgeLabelStyle,
+                        fill: evt.target.value
+                      })
+                    }
+                  />
+                </div>
+                <br></br>
+                <div className="edge-input">
+                  <label> Label fontWeight</label>
+                  <select
+                    style={{ width: "50%", padding: ".1rem", height: "2rem" }}
+                    name="edgeLabelFontWeight"
+                    id="edgeLabel-fontWeight"
+                    value={edgeLabelStyle.fontWeight}
+                    onChange={(evt) =>
+                      setEdgeLabelStyle({
+                        ...edgeLabelStyle,
+                        fontWeight: evt.target.value
+                      })
+                    }
+                  >
+                    <option value="normal">light</option>
+                    <option value="bolder" selected>
+                      bold
+                    </option>
+                  </select>
+                </div>
+                <br></br>
+                {/* <div className="checkboxwrapper">
+                <label>Arrow Edge</label>
+                <input
+                  type="checkbox"
+                  checked={edgeArrowHead === "arrow" ? true : false}
+                  onChange={(evt) =>
+                    setEdgeArrowHead(
+                      evt.target.checked ? "arrow" : "arrowclosed"
+                    )
+                  }
+                />
+              </div> */}
+              </div>
+            ) : (
+              <div>
+                <div className="description">
+                  <h1>Edit Node</h1>
+                </div>
+                <div className="checkboxwrapper">
+                  <span>Hide MiniMap:</span>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={nodeHidden}
+                      onChange={(evt) => setNodeHidden(evt.target.checked)}
+                    />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+                <br></br>
+                <br></br>
+                <div className="node-input">
+                  <label>Border Radius:</label>
+                  <input
+                    type="number"
+                    value={radius || ""}
+                    onChange={(evt) => setRadius(evt.target.value)}
+                  />
+                </div>
+                {hideText1 ? (
+                  <div className="node-input">
+                    <label>label:</label>
+                    <input
+                      value={nodeName || ""}
+                      onChange={(evt) => {
+                        setNodeName(evt.target.value);
+                      }}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideText2 ? (
+                  <div className="node-input">
+                    <label>label2:</label>
+                    <input
+                      value={nodeName2 || ""}
+                      onChange={(evt) => setNodeName2(evt.target.value)}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideText3 ? (
+                  <div className="node-input">
+                    <label>label3:</label>
+                    <input
+                      value={nodeName3 || ""}
+                      onChange={(evt) => setNodeName3(evt.target.value)}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="node-position">
+                  <label>
+                    <b>Position X:</b> &nbsp; {Math.trunc(nodeX)}
+                  </label>
+                  <label>
+                    <b>Position Y:</b> &nbsp; {Math.trunc(nodeY)}
+                  </label>{" "}
+                </div>
+                {/* <div className="dimensions">
+        <div>
+          <label>Width:</label> 
+          <input
+            style={{ width: "50px" }}
+            value={parseInt(width)}
+            type="number"
+            onChange={(evt) => setWidth(evt.target.value)}
+          />
+        </div>
+        <div>
+          <label>Height:</label> 
+          <input
+            style={{ width: "50px" }}
+            value={parseInt(height)}
+            type="number"
+            onChange={(evt) => setHeight(evt.target.value)}
+          />
+        </div>
+      </div> */}
+                <div className="node-input">
+                  <label>background:</label>
+                  <input
+                    type="color"
+                    value={nodeBg}
+                    onChange={(evt) => setNodeBg(evt.target.value)}
+                  />
+                </div>{" "}
+                {hideCode ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Code:</label>
+                    <textarea
+                      value={code}
+                      cols="30"
+                      rows="10"
+                      onChange={(evt) => setCode(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideCode2 ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Code2:</label>
+                    <textarea
+                      value={code2}
+                      cols="30"
+                      rows="10"
+                      onChange={(evt) => setCode2(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideCode3 ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Code3:</label>
+                    <textarea
+                      value={code3}
+                      cols="30"
+                      rows="10"
+                      onChange={(evt) => setCode3(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideImage ? (
+                  <div className="image-node">
+                    <div className="node-input">
+                      <label>Image:</label>
+                      <input
+                        style={{ width: "150px" }}
+                        type="file"
+                        onChange={onImageChange}
+                      />
+                    </div>{" "}
+                    <img src={nodeImage} width="50%" alt="img" />{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideImage2 ? (
+                  <div className="image-node">
+                    <label>Image2:</label>
+                    <input
+                      style={{ width: "150px" }}
+                      type="file"
+                      onChange={onImageChange2}
+                    />{" "}
+                    <img src={nodeImage2} width="150" height="70" alt="img" />{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideImage3 ? (
+                  <div className="image-node">
+                    <label>Image3:</label>
+                    <input
+                      style={{ width: "150px" }}
+                      type="file"
+                      onChange={onImageChange3}
+                    />{" "}
+                    <img src={nodeImage3} width="150" height="70" alt="img" />{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideTextArea1 ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Text Area:</label>
+                    <textarea
+                      value={textArea}
+                      cols="30"
+                      rows="5"
+                      onChange={(evt) => setTextArea(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideTextArea2 ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Text Area2:</label>
+                    <textarea
+                      value={textArea2}
+                      cols="30"
+                      rows="5"
+                      onChange={(evt) => setTextArea2(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {hideTextArea3 ? (
+                  <div className="node-input" style={{ marginTop: "12px" }}>
+                    <label>Text Area3:</label>
+                    <textarea
+                      value={textArea3}
+                      cols="30"
+                      rows="5"
+                      onChange={(evt) => setTextArea3(evt.target.value)}
+                    ></textarea>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            )}
+          </aside>
+        </ReactFlowProvider>
+      </div>
+    </main>
   );
 };
 
