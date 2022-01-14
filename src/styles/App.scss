@@ -30,20 +30,7 @@ img {
   display: flex;
   position: relative;
 
-  .btn-toggle {
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    background: #353535;
-    color: #fff;
-    text-align: center;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    display: none;
-  }
+ 
 
   .sidebar-btn-wrapper {
     display: flex;
@@ -166,17 +153,6 @@ img {
       position: absolute;
       left: 10px;
       top: 130px;
-    }
-  }
-  @media (max-width: $breakpoint-md) {
-    .btn-toggle {
-      display: flex;
-    }
-
-    &.rtl {
-      .btn-toggle {
-        margin-left: auto;
-      }
     }
   }
 }
@@ -936,3 +912,48 @@ input:checked + .slider:before {
   background: red;
   color: #fff;
 }
+
+// ------------------- SideBar ----------------------
+
+.sidebar-content {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-content div{
+  width: calc(100% - 36px);
+
+}
+
+.toggle-btn {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background: #353535;
+  color: #fff;
+  text-align: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin: 0 -16px;
+}
+
+.toggle-sidebar {
+  width: 60px !important;
+  box-sizing: border-box;
+  overflow: hidden;
+
+}
+
+.toggle-sidebar .sidebar-content {
+  display: none;
+}
+
+// --------------- End of Sidebar -------------------
