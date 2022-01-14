@@ -1,3 +1,5 @@
+import { toastMessageSuccess } from "../toastify";
+
 class Utils {
   constructor(firestore) {
     this.firestore = firestore;
@@ -28,7 +30,7 @@ class Utils {
       .doc(id)
       .update(data)
       .then(() =>
-        alert(
+        toastMessageSuccess(
           `File ${
             name === "node" ? "Data" : "File"
           } has been updated successfully`

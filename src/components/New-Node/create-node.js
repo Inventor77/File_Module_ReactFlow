@@ -12,6 +12,7 @@ import {
 import Popup from "reactjs-popup";
 import firestore from "../../firebase";
 import Utils from "../../utils/utils";
+import { toastMessageWarning } from "../../toastify";
 
 // import Aside from "../../Aside";
 import "./index.css";
@@ -83,11 +84,11 @@ const NewNode = () => {
 
   const saveNode = () => {
     if (nodeName === "") {
-      alert("Please provide name of the node");
+      toastMessageWarning("Please provide name of the node");
       return;
     }
     if (nodeDesc === "") {
-      alert("Please provide description of the node");
+      toastMessageWarning("Please provide description of the node");
       return;
     }
     setNodes((el) => ({
@@ -157,7 +158,7 @@ const NewNode = () => {
                               }));
                             }
                           } else {
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             close();
@@ -174,7 +175,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -190,7 +191,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -217,7 +218,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -233,7 +234,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -249,7 +250,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -276,7 +277,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -292,7 +293,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -308,7 +309,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -335,7 +336,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -351,7 +352,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;
@@ -367,7 +368,7 @@ const NewNode = () => {
                             }
                           } else {
                             close();
-                            alert(
+                            toastMessageWarning(
                               "Maximum 4 elements can be selected for one custom Node"
                             );
                             return;

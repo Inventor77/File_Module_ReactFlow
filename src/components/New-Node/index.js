@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaBuffer, FaFolderPlus } from "react-icons/fa";
 import Popup from "reactjs-popup";
 import firestore from "../../firebase";
+import { toastMessageWarning } from "../../toastify";
 
 // import Aside from "../../Aside";
 import Utils from "../../utils/utils";
@@ -111,11 +112,15 @@ const NewNode = () => {
                       className="button popup-success-btn"
                       onClick={() => {
                         if (nodeName === "") {
-                          alert("Please provide name of the node");
+                          toastMessageWarning(
+                            "Please provide name of the node"
+                          );
                           return;
                         }
                         if (nodeDesc === "") {
-                          alert("Please provide description of the node");
+                          toastMessageWarning(
+                            "Please provide description of the node"
+                          );
                           return;
                         }
                         var data = {
