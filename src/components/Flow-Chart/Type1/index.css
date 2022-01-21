@@ -33,7 +33,6 @@
 }
 
 button {
-  background: #ff7a00;
   color: white;
   padding: 10px;
   padding-left: 20px;
@@ -42,27 +41,12 @@ button {
   margin-left: 10px;
   border: none;
   cursor: pointer;
-  font-weight: normal;
 }
 
 label {
   font-size: 16px;
   text-transform: capitalize;
   margin-bottom: 10px;
-}
-
-input {
-  padding: 8px;
-  border-radius: 5px;
-  margin-left: 10px;
-  background: #efefef;
-}
-
-textarea {
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
-  background: #efefef;
 }
 
 .Add .rect {
@@ -79,83 +63,14 @@ textarea {
   display: block;
 }
 
-aside {
-  text-align: center !important;
-}
-
 aside .codeNodeMain {
   text-align: left !important;
-  width: 90%;
+  width: 100%;
   margin-left: 5px;
-}
-
-aside .updatenode__bglabel {
-  margin-top: 10px;
-}
-
-/* .checkboxwrapper {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-} */
-
-.checkboxwrapper input {
-  margin-top: -7px;
-}
-
-.btn-save {
-  margin-top: 20px;
-}
-
-.save {
-  background: #ff7a00;
-  color: white;
-  font-size: 20px;
-  width: 90%;
-  margin-top: 5px;
-  border-radius: 5px;
-  font-weight: normal;
-}
-
-.back {
-  background: #ff7a00;
-  color: white;
-  font-size: 18px;
-  width: 90%;
-  margin-top: 5px;
-  padding: 10px;
-  border-radius: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  text-decoration: none;
-  font-weight: normal;
-}
-
-.back-button {
-  margin-top: 10px;
-  margin-bottom: 20px;
 }
 
 .side {
   display: block;
-}
-
-.dndflow {
-  flex-direction: column;
-  display: flex;
-  height: 100%;
-}
-
-.dndflow aside {
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-  background: #fcfcfc;
-  overflow-y: auto;
-}
-
-.dndflow aside .description {
-  margin-bottom: 10px;
 }
 
 .code {
@@ -541,32 +456,25 @@ aside .updatenode__bglabel {
   }
 
   .dndflow aside {
-    width: 20%;
-    max-width: 250px;
+    width: 300px;
   }
-}
-
-.dndflow aside .name-node {
-  padding-bottom: 15px;
 }
 
 .dndflow aside .image-node {
   padding-top: 15px;
 }
 
-.dndflow aside .checkboxwrapper {
-  padding-top: 15px;
-}
-
 .modal {
-  font-size: 12px;
+  padding: 16px 24px;
+  padding-top: 0px;
 }
 .modal > .header {
   width: 100%;
   border-bottom: 1px solid gray;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
-  padding: 5px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 .modal > .content {
   width: 100%;

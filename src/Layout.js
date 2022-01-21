@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Aside from "./Aside";
+// import Aside from "./Aside";
 import Main from "./Main";
 import "./styles/App.scss";
 
@@ -11,7 +11,7 @@ function Layout() {
 
   return (
     <div className={`app ${toggled ? "toggled" : ""}`}>
-      <Aside toggled={toggled} handleToggleSidebar={handleToggleSidebar} />
+      {/* <Aside toggled={toggled} handleToggleSidebar={handleToggleSidebar} /> */}
       <Main toggled={toggled} handleToggleSidebar={handleToggleSidebar} />
     </div>
   );

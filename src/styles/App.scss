@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+  @import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 $sidebar-bg-color: #000;
 $submenu-bg-color: rgba(255, 255, 255, 0.05);
@@ -30,20 +30,7 @@ img {
   display: flex;
   position: relative;
 
-  .btn-toggle {
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    background: #353535;
-    color: #fff;
-    text-align: center;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    display: none;
-  }
+ 
 
   .sidebar-btn-wrapper {
     display: flex;
@@ -91,7 +78,6 @@ img {
     overflow-y: auto;
     header {
       margin-bottom: 40px;
-      border-bottom: 1px solid #efefef;
       h1 {
         display: flex;
         align-items: center;
@@ -163,36 +149,10 @@ img {
         font-size: 24px;
       }
     }
-    .add {
-      font-size: 16px;
-    }
-    .add-project {
-      margin-left: -40px;
-    }
-    .main-content {
-      margin-top: 20px;
-    }
     .add-node {
       position: absolute;
       left: 10px;
       top: 130px;
-    }
-    .right {
-      input {
-        width: 100px;
-        font-size: 13px;
-      }
-    }
-  }
-  @media (max-width: $breakpoint-md) {
-    .btn-toggle {
-      display: flex;
-    }
-
-    &.rtl {
-      .btn-toggle {
-        margin-left: auto;
-      }
     }
   }
 }
@@ -213,73 +173,6 @@ img {
   &.yellow {
     color: #000000;
     background: #ffd331;
-  }
-}
-
-.add-project {
-  background: #ff7a00;
-  text-decoration: none;
-  padding: 15px;
-  padding-right: 25px;
-  padding-left: 25px;
-  color: white;
-  border-radius: 20px;
-  font-weight: normal;
-}
-
-.add-node {
-  background: rgb(27, 199, 127);
-  text-decoration: none;
-  padding: 15px;
-  padding-right: 25px;
-  padding-left: 25px;
-  color: white;
-  border-radius: 20px;
-}
-
-.add {
-  font-size: 18px;
-  padding-left: 10px;
-}
-
-.right {
-  float: right;
-  margin-top: -40px;
-}
-
-.right input {
-  margin-top: -20px;
-  padding: 6px 28px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-hr {
-  border: 0.5px solid #ccc;
-}
-
-.title {
-  span {
-    margin-left: 5px;
-    font-weight: 400;
-  }
-}
-.main-content-list {
-  margin-bottom: 20px;
-}
-
-.content {
-  margin-top: -8px;
-}
-
-.author {
-  padding-left: 10px;
-  span {
-    margin-left: 5px;
-  }
-  .date {
-    color: rgb(185, 184, 184);
   }
 }
 
@@ -316,15 +209,15 @@ hr {
   p {
     margin-top: -10px;
   }
-  .link {
-    background: rgb(6, 192, 152);
-    text-decoration: none;
-    padding: 8px;
-    padding-right: 25px;
-    padding-left: 25px;
-    color: white;
-    border-radius: 5px;
-  }
+  // .link {
+  //   background: rgb(6, 192, 152);
+  //   text-decoration: none;
+  //   padding: 8px;
+  //   padding-right: 25px;
+  //   padding-left: 25px;
+  //   color: white;
+  //   border-radius: 5px;
+  // }
 }
 
 // .close {
@@ -364,34 +257,703 @@ hr {
   border-radius: 5px;
 }
 
-#node-table {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #ddd;
+// ----------------- Header -----------------
+
+.top-nav {
+  display: flex;
+  flex-wrap: wrap;
+ background: #F2F2F2;
+  padding : 16px 40px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  gap: 15px;
 }
 
-#node-table td,
-#node-table th {
-  border-bottom: 1px solid #ddd;
+.tab-container {
+  flex-basis: fit-content;
+  display: flex;
+  gap: 16px;
+}
+
+// _____ Tabs ________
+
+.tab {
+  display:flex;
+  flex-wrap: nowrap;
+  background: #fff;
+  text-decoration: none;
+  padding: 10px 25px;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+}
+
+.active-tab {
+  color: #3a80f2 !important;
+  border: 1px solid #3a80f2 !important;
+  cursor: pointer
+}
+
+.tab:hover {
+  background:#3a80f2 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.tab-text {
+  font-size: 16px;
+  padding-left: 7px;
+  inline-size: fit-content;
+  white-space: nowrap;
+}
+
+// ___________________
+
+
+// _____ Seach Bar _____
+
+.search-bar {
+  flex-basis: 500px;
+}
+
+.search-bar input {
+  background: white;
+  padding: 12px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: 0px 0px 5px 2px #ccc;
+  width: calc(100% - 36px);
+}
+// ____________________
+
+
+
+// _____ Add Element ________
+
+.add-project,
+.add-node,
+.add-field {
+  display:flex;
+  flex-wrap: nowrap;
+  background: #fff;
+  text-decoration: none;
+  padding: 10px 25px;
+  color: #ff7a00;
+  border-radius: 5px;
+  border: 1px solid #ff7a00;
+  text-decoration: none;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+}
+
+.add-project:hover,
+.add-node:hover,
+.add-field:hover {
+  background: #ff7a00 !important;
+  color: #fff !important;
+}
+
+// _________________________
+
+
+// -------------- End of Header --------------
+
+
+
+
+// ---------- Edit Existing Project ----------
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  header {
+    margin-bottom: 36px;
+  }
+}
+
+.header-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.export-pdf, .export-json {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  padding: 10px 25px;
+  border-radius: 5px;
+  font-weight: normal;
+  color: #000;
+}
+
+.export-json:hover,
+.export-pdf:hover {
+  color: #fff;
+}
+
+.export-pdf:hover {
+  background:#FF0000;
+}
+
+.export-json:hover {
+  background: #F8B406;
+}
+
+.dndflow {
+  display: flex;
+  height: 80vh;
+}
+
+// ____________ Aside ______________
+
+aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: #f8f8f8;
+  padding: 16px 30px;
+  text-align: center;
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+}
+aside > div {
+ width: 100%;
+}
+
+.description {
+  margin: 26px 0px;
+  font-size: 16px;
+  color: #626262;
+}
+
+.checkboxwrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.edge-input,
+.node-input{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+.node-input {
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.node-position {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+input,select {
+  background:  #DEDEDE;
+    border: none;
+    outline: none;
   padding: 8px;
+  border-radius: 5px;
+  width: 60%;
 }
 
-#node-table tr:hover {
-  background-color: #f7f9fa;
+.node-input input {
+  width: 50%;
 }
 
-#node-table th {
-  font-size: 0.975rem;
-  font-weight: 400;
-  color: #536171;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #f7f9fa;
+textarea {
+  background:  #DEDEDE;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  width: 100%;
 }
 
-.main-delete {
+
+
+// _________ End of Aside __________
+
+
+// ---------- End of Edit Existing Project ----------
+
+
+
+// ----------------- Check Box ----------------------
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+// ---------------- End of Check Box ----------------
+
+
+
+// ----------------- Project Main ----------------------
+
+.main-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 0px;
+  list-style-type: none;
+
+  .add-new-project {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+    text-align: center;
+    font-size: 56px;
+    cursor: pointer;
+    color: #e07d7d;
+    box-shadow: 0 0 3px 1px #aaa;
+    border-radius: 10px;
+  }
+  
+  .add-new-project:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 338px;
+    height: 0px;
+    z-index: 1;
+    background-color: #aaa;
+    opacity: 0;
+	transition: all .4s ease-in;
+  border-radius: 10px;
+  
+}
+.add-new-project:hover:after {
+  height: 224px;
+	opacity: 1;
+}
+.add-new-project:before {
+  content:"Add Project";
+  position: absolute;
+  opacity: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  transition: all .5s ease-in;
+  z-index: 2;
+}
+.add-new-project:hover:before {
+  opacity: 1;
+  font-size: 20px;
+}
+
+  .main-content-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 336px;
+    height: 220px;
+    border: 2px solid #aaa;
+    border-radius: 10px;
+    
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-evenly;
+      height: 100%;
+      width: 100%;
+      padding: 0px 36px;
+      box-sizing: border-box;
+      text-decoration: none;
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;
+        .title {
+          text-decoration: none;
+          font-size: 32px;
+          font-weight: bold;
+          text-transform: capitalize;
+          color: #777;
+        }
+        .project-date {
+          font-size: 16px;
+          color: #888;
+        }
+      }
+      .action-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 22px;
+        width: 100%;
+        .user-info {
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          gap: 10px;
+          .user-name {
+            font-size: 18px;
+            color: #aaa;
+            text-transform: capitalize;
+          }
+          .project-user {
+            color: #96bcfa;
+            cursor: pointer;
+          }
+          .project-user:hover {
+            color: #5793f3;
+          }
+        }
+        .project-delete {
+          color: #f5b0b0;
+          cursor: pointer;
+        }
+        .project-delete:hover {
+          color: #eb5e5e;
+        }
+      }
+    }
+  }
+}
+
+
+
+// -------------- End of Project Main -------------------
+
+// ----------------- Node Main ----------------------
+
+.node-main-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  .main-content-list {
+    width: 100%;
+
+    #node-table {
+      border-collapse: collapse;
+      width: 100%;
+      box-shadow: 0 0 3px 1px #aaa;
+      border-radius: 5px;
+
+      thead {
+          th {
+            font-size: 16px;
+            font-weight: bold;
+            color: #525d69;
+            padding: 24px 36px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+          }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #ccc;
+          td {
+            padding: 24px 36px;
+            // color: #888;
+            // color: #000;
+          }
+        }
+        .no-click {
+          cursor: not-allowed;
+          color: #888;
+          // .delete-btn:hover {
+          //   color: red;
+          //   background:none !important; 
+          // }
+        }
+      }
+
+    }
+  }
+}
+
+.delete-btn {
+  color: red;
+  background: #fff;
+  padding: 0;
+  // border: 1px solid red;
+  span.tab-text {
+    font-size: 16px;
+    padding: 0;
+  }
+}
+
+// .delete-btn:hover {
+  // color: #fff;
+  // background: red !important; 
+// }
+
+
+// -------------- End of Node Main -------------------
+
+
+
+
+// ------------------- New Node Main ---------------------
+
+
+.create-new-node {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 0 0 3px 1px #aaa;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.project-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  
+  .project-details-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 5px 36px;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  .project-details-description {
+    width: 100%;
+    padding: 20px 36px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+}
+
+  .create-node-content {
+    width: 100%;
+    .create-node-content-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      .node-fields {
+        width: 100%;
+        .div-node {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          border-bottom: 1px solid #ccc;
+          padding: 0px 36px;
+          box-sizing: border-box;
+        h3 {
+          font-size: 16px;
+        }
+        .delete-btn {
+          padding: 0 24px;
+        }
+      }
+      
+    }
+  }
+}
+
+// ___________ Popup ____________
+
+.node-wrapper-field-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 36px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.node-wrapper-field {
+  height: 84px;
+  width: 48%;
+  text-align: center;
+  line-height: 84px;
+  cursor: pointer;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  box-sizing: border-box;
+  &:hover {
+    box-shadow: 0 0 3px 1px #aaa;
+  }
+  h6 {
+    font-size: 24px;
+    margin: 0;
+  }
+  span {
+    padding-left: 24px;
+  }
+}
+.add-field-close {
+  margin: 12px 0;
   float: right;
-  margin-top: -50px;
+  border: 1px solid red;
+  color: red;
+  background: #fff;
+  font-size: 16px;
+  font-weight: bold;
 }
+.add-field-close:hover {
+  background: red;
+  color: #fff;
+}
+// ______________________________
+
+
+// -------------- End of New Node Main -------------------
+
+
+.popup-success-btn {
+  background: #fff;
+  border: 1px solid green;
+  color: green;
+  font-size: 16px;
+  font-weight: bold;
+}
+.popup-success-btn:hover {
+  background: green;
+  color: #fff;
+}
+.popup-cancel-btn {
+  background: #fff;
+  border: 1px solid red;
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.popup-cancel-btn:hover {
+  background: red;
+  color: #fff;
+}
+
+// ------------------- SideBar ----------------------
+
+.sidebar-content {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-content div{
+  width: calc(100% - 36px);
+
+}
+
+.toggle-btn {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background: #353535;
+  color: #fff;
+  text-align: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin: 0 -16px;
+}
+
+.toggle-sidebar {
+  width: 60px !important;
+  box-sizing: border-box;
+  overflow: hidden;
+
+}
+
+.toggle-sidebar .sidebar-content {
+  display: none;
+}
+
+// --------------- End of Sidebar -------------------

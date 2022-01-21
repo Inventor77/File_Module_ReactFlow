@@ -1,34 +1,48 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaBars,
+  // FaBars,
   FaFolderPlus,
-  FaLock,
-  FaUserCircle,
+  // FaUserCircle,
+  FaTrash,
+  FaUser,
   FaBuffer,
+  FaPlus
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import firebaseDb from "./firebase";
+import firestore from "./firebase";
+import Utils from "./utils/utils";
 
 const Main = ({ handleToggleSidebar }) => {
   const [charts, setCharts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [chartsId, setChartsId] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const utilsObject = new Utils(firestore);
 
   useEffect(() => {
-    firebaseDb.child("charts").on("value", (snapshot) => {
-      if (snapshot.val() != null) {
-        setIsLoading(false);
-        setCharts({
-          ...snapshot.val(),
-        });
-      }
-    });
+    read();
   }, []);
 
-  const deleteFile = (file) => {
-    if (window.confirm("Are you sure to delete this file")) {
-      firebaseDb.child(`charts/${file}`).remove();
-    }
+  const read = () => {
+    readFile()
+      .then((data) => {
+        setIsLoading(false);
+        setCharts(data[0]);
+        setChartsId(data[1]);
+      })
+      .catch((err) => console.log(err.message));
   };
+
+  const readFile = async () => {
+    const docs = await utilsObject.readData("issueModule");
+    let arr = [],
+      id = [];
+    docs.forEach((cur) => {
+      arr = [...arr, cur.data()];
+      id = [...id, cur.id];
+    });
+    return [arr, id];
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -52,37 +66,17 @@ const Main = ({ handleToggleSidebar }) => {
 
   return (
     <main>
-      <div className="btn-toggle" onClick={() => handleToggleSidebar(true)}>
+      {/* <div className="btn-toggle" onClick={() => handleToggleSidebar(true)}>
         <FaBars />
-      </div>
-      <header>
-        <div
-          style={{
-            padding: "20px 24px",
-          }}
-        >
-          <Link
-            to="/flow-chart"
-            className="link add-project"
-            style={{ textDecoration: "none", borderRadius: "5px" }}
-          >
+      </div> */}
+      <header className="top-nav">
+        <div>
+          <Link to="/flow-chart" className="add-project">
             <FaFolderPlus />
-            <span className="add"> New Project</span>
-          </Link>
-          <Link
-            to="/new-node"
-            className="link add-node"
-            style={{
-              textDecoration: "none",
-              marginLeft: "20px",
-              borderRadius: "5px",
-            }}
-          >
-            <FaBuffer />
-            <span className="add"> Add Custom Node</span>
+            <span className="tab-text">New Project</span>
           </Link>
         </div>
-        <div className="right">
+        <div className="search-bar">
           <input
             type="text"
             placeholder="Search Projects"
@@ -90,56 +84,69 @@ const Main = ({ handleToggleSidebar }) => {
             onChange={handleChange}
           />
         </div>
+        <div className="tab-container">
+          <Link to="/" className="tab active-tab">
+            <FaBuffer />
+            <span className="tab-text"> Projects </span>
+          </Link>
+          <Link to="/new-node" className="tab">
+            <FaBuffer />
+            <span className="tab-text"> Nodes </span>
+          </Link>
+        </div>
       </header>
-      <ul
-        className="main-content"
-        style={{ listStyleType: "none", marginLeft: "-30px" }}
-        id="myUL"
-      >
+      <h1> Projects </h1>
+      <ul className="main-content" id="myUL">
         {isLoading && <h1 style={{ textAlign: "center" }}>Loading...</h1>}
+        <li className="main-content-grid">
+          <Link to="/flow-chart" className="add-new-project">
+            <FaPlus />
+          </Link>
+        </li>
         {Object.keys(charts).map((id) => {
           var d = new Date(charts[id].date);
           return (
-            <li className="main-content-list" key={id}>
-              <div className="title">
-                <Link
-                  to={{
-                    pathname: "/edit",
-                    state: `${charts[id].values}`,
-                    id: `${id}`,
-                    name: `${charts[id].name}`,
-                  }}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  <h2>
-                    <FaLock style={{ color: "#ff7a00" }} />
-                    <span>{charts[id].name}</span>
-                  </h2>
-                </Link>
-              </div>
-              <div className="content">
-                <div className="author">
-                  <FaUserCircle style={{ color: "#000" }} />
-                  <span className="name">mukund.shridaran</span>
-                  <span className="date">
-                    - updated on {`${d.toDateString()}`}
-                  </span>
+            <li className="main-content-grid" key={id}>
+              <Link
+                to={{
+                  pathname: "/edit",
+                  state: `${charts[id].values}`,
+                  id: `${chartsId[id]}`,
+                  name: `${charts[id].name}`
+                }}
+                className="project-info"
+              >
+                <div className="content">
+                  <div className="title">{charts[id].name}</div>
+                  {/* <div className="author"> */}
+
+                  <div className="project-date">
+                    Edited on {`${d.toDateString()}`}
+                  </div>
+                  {/* </div> */}
                 </div>
-                <button
-                  onClick={() => deleteFile(id)}
-                  className="delete main-delete"
-                >
-                  Delete
-                </button>
-              </div>
-              <hr />
+                <div className="action-container">
+                  <div className="user-info">
+                    <FaUser className="project-user" />
+                    <span className="user-name">mukund shridaran</span>
+                  </div>
+                  <div>
+                    <FaTrash
+                      onClick={() => {
+                        utilsObject
+                          .deleteData("file", chartsId[id])
+                          .then(() => read());
+                      }}
+                      className="project-delete"
+                    />
+                  </div>
+                  {/* </FaTrash> */}
+                </div>
+              </Link>
             </li>
           );
         })}
       </ul>
-      <footer>
-        <small>Copyright @ 2021 Arizon Systems</small>
-      </footer>
     </main>
   );
 };

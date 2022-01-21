@@ -1,15 +1,14 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
-let config = {
-  apiKey: "AIzaSyCyVtJVByttlqrgUXToRf7eGdT0kyVj3pY",
-  authDomain: "flow-chart-77eaa.firebaseapp.com",
-  projectId: "flow-chart-77eaa",
-  databaseURL: "https://flow-chart-77eaa-default-rtdb.firebaseio.com/",
-  storageBucket: "flow-chart-77eaa.appspot.com",
-  messagingSenderId: "825276871835",
-  appId: "1:825276871835:web:a8e4c174fba1778c32823e",
-};
+firebase.initializeApp({
+  apiKey: "AIzaSyCPWRyLbIk-j3tD9aQ99lAkPReRwKthnKI",
+  authDomain: "issuemodule.firebaseapp.com",
+  projectId: "issuemodule",
+  storageBucket: "issuemodule.appspot.com",
+  messagingSenderId: "405008571868",
+  appId: "1:405008571868:web:c0247f797abe761283c319"
+});
 
-var fireDb = firebase.initializeApp(config);
-
-export default fireDb.database().ref();
+const firestore = firebase.firestore();
+export default firestore;
